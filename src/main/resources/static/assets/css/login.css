@@ -1,0 +1,29 @@
+body {
+    background-color: #f4f3ef;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    margin-top: 60px; /* Adjust to center below the navbar */
+}
+
+.register-container {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    margin-top: 520px;
+}
+
+
+.logo .logo-normal {
+    font-size: 1.5rem; /* 두 배 크기로 조정 */
+    font-weight: bold;
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Ease Management - Register
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/login.css}" rel="stylesheet" />
+    <link th:href="@{/assets/demo/demo.css}" rel="stylesheet" />
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+    <div class="container-fluid">
+        <div class="navbar-wrapper">
+            <div class="logo">
+                <a class="simple-text logo-normal">
+                    Ease Management
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="navbar-spacer"></div>
+<div class="register-container">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-center">Sign Up</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" th:action="@{/register}" onsubmit="return confirmRegistration()">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" autocomplete="off" required>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="off" required>
+                </div>
+
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <!-- First Name -->
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+
+                <!-- Company -->
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" class="form-control" id="company" name="company">
+                </div>
+
+                <!-- Address -->
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" name="address">
+                </div>
+
+                <!-- City -->
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control" id="city" name="city">
+                </div>
+
+                <!-- Country -->
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" class="form-control" id="country" name="country">
+                </div>
+
+                <!-- Postal Code -->
+                <div class="form-group">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" class="form-control" id="postalCode" name="postalCode">
+                </div>
+
+                <!-- About Me -->
+                <div class="form-group">
+                    <label for="aboutMe">About Me</label>
+                    <textarea class="form-control" id="aboutMe" name="aboutMe"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                <a th:href="@{/login}" class="btn btn-secondary btn-block mt-2">Back to Login</a>
+            </form>
+        </div>
+    </div>
+</div>
+<footer class="footer footer-black  footer-white ">
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="https://www.creative-tim.com/license" target="_blank">Licenses</a></li>
+                </ul>
+            </nav>
+            <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>, made with <i class="fa fa-heart heart"></i> by E.M
+              </span>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Core JS Files -->
+<script th:src="@{/assets/js/core/jquery.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
+<script th:src="@{/assets/js/paper-dashboard.js}"></script>
+
+<!-- JavaScript for confirmation alert -->
+<script>
+    function confirmRegistration() {
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match. Please try again.");
+            return false;
+        }
+
+        return confirm("Are you sure you want to register?");
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Ease Management
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/login.css}" rel="stylesheet" />
+    <link th:href="@{/assets/demo/demo.css}" rel="stylesheet" />
+    <style>
+        body, .wrapper {
+            background-color: #f4f3ef;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+    <div class="container-fluid">
+        <div class="navbar-wrapper">
+            <a class="navbar-brand" href="javascript:;">1</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navigation">
+
+            <form class="form-inline">
+                <div class="input-group no-border">
+                    <input type="text" value="" class="form-control" placeholder="Search...">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <i class="nc-icon nc-zoom-split"></i>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn-magnify" href="javascript:;">
+                        <i class="nc-icon nc-layout-11"></i>
+                        <p>
+                            <span class="d-lg-none d-md-block">Stats</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item btn-rotate dropdown">
+                    <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="nc-icon nc-bell-55"></i>
+                        <p>
+                            <span class="d-lg-none d-md-block">Some Actions</span>
+                        </p>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn-rotate" href="javascript:;">
+                        <i class="nc-icon nc-settings-gear-65"></i>
+                        <p>
+                            <span class="d-lg-none d-md-block">Account</span>
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</nav>
+
+
+<div class="wrapper ">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <div class="logo">
+            <a class="simple-text logo-mini">
+                <div class="logo-image-small">
+                    <img th:src="@{/assets/img/logo-small.png}">
+                </div>
+            </a>
+            <div class="mt-3" style="text-align: left;">
+                <h5 style="font-size: 15px;">Welcome, <span th:text="${username}"></span>!</h5>
+            </div>
+
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li class="active">
+                    <a th:href="@{/myProject}">
+                        <i class="nc-icon nc-paper"></i>
+                        <p>My Project</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{dashboard}">
+                        <i class="nc-icon nc-bank"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/view/otherProjects}">
+                        <i class="nc-icon nc-bullet-list-67"></i>
+                        <p>Other Project</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/view/notifications}">
+                        <i class="nc-icon nc-bell-55"></i>
+                        <p>Notification</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/view/user}">
+                        <i class="nc-icon nc-single-02"></i>
+                        <p>User Profile</p>
+                    </a>
+                </li>
+                <li class="active-pro">
+                    <a th:href="@{/view/upgrade}">
+                        <i class="nc-icon nc-spaceship"></i>
+                        <p>Upgrade to PRO</p>
+                    </a>
+                </li>
+                <!-- 로그아웃 -->
+                <li class="logout">
+                    <a th:href="@{/logout}">
+                        <i class="nc-icon nc-button-power"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <a class="navbar-brand" href="javascript:;">My Project</a>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content" style="margin-bottom:10px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">My Projects</h5>
+                                <p class="card-category">Overview of your projects</p>
+                            </div>
+                            <!-- New Project Button -->
+                            <a href="createProjectForm.html" class="btn btn-success">New Project</a>
+                        </div>
+                        <div class="card-body">
+                            <!-- Existing project cards go here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content" style="margin-top: 5px;">
+            <!-- Content for My Project -->
+            <div class="row">
+                <!-- Project 1 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Project 1: Marketing Campaign</h5>
+                            <p class="card-category">Status: In Progress</p>
+                        </div>
+                        <div class="card-body">
+                            <p>This project focuses on launching a comprehensive digital marketing campaign to increase brand awareness and drive sales.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary btn-block">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project 2 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Project 2: Software Development</h5>
+                            <p class="card-category">Status: Completed</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Development of a custom software solution aimed at automating internal processes to improve efficiency.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary btn-block">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project 3 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">프로젝트 3: 이벤트 기획</h5>
+                            <p class="card-category">상태: 예정</p>
+                        </div>
+                        <div class="card-body">
+                            <p>이해관계자 참여를 유도하고 네트워킹 기회를 강화하기 위한 기업 이벤트를 기획하고 조직합니다.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary btn-block">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Personal Project 1 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">개인 프로젝트 1: 여행 블로그 웹사이트</h5>
+                            <p class="card-category">상태: 개발 중</p>
+                        </div>
+                        <div class="card-body">
+                            <p>여행 경험, 팁, 사진을 공유하기 위한 개인 여행 블로그 웹사이트를 제작 중입니다.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary btn-block">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Personal Project 2 -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Personal Project 2: Recipe Management App</h5>
+                            <p class="card-category">Status: Prototype</p>
+                        </div>
+                        <div class="card-body">
+                            <p>Developing an app to manage and organize personal recipes, including features for categorization, sharing, and meal planning.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary btn-block">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="footer footer-black  footer-white " >
+            <div class="container-fluid">
+                <div class="row">
+                    <nav class="footer-nav">
+                        <ul>
+                            <li><a href="https://www.creative-tim.com/license" target="_blank">Licenses</a></li>
+                        </ul>
+                    </nav>
+                    <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>, made with <i class="fa fa-heart heart"></i> by E.M
+              </span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<!-- Core JS Files -->
+<script th:src="@{/assets/js/core/jquery.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+<!-- Include Perfect Scrollbar before paper-dashboard -->
+<script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
+<!-- Chart JS -->
+<script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
+<!-- Main Dashboard Script -->
+<script th:src="@{/assets/js/paper-dashboard.js}"></script>
+
+</body>
+
+</html>
