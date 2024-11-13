@@ -1,0 +1,16 @@
+.custom-page-link {
+    background-color: white;
+    color: black;
+    border-color: white;
+}
+
+.custom-page-link:hover {
+    /*background-color: black;*/
+    color: white;
+}
+
+.page-item.active .custom-page-link {
+    background-color: #51cbce; /* 선택된 페이지의 배경색 */
+    color: white; /* 선택된 페이지의 글자색 */
+    border-color: #b3d7ff;
+}

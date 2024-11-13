@@ -7,11 +7,15 @@ import edu.du.myproject1101_1.entity.User;
 import edu.du.myproject1101_1.repository.UserRepository;
 import edu.du.myproject1101_1.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -28,82 +32,85 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping("/myProject")
-    public String showMyProjectPage(Model model, Principal principal) {
+    public String showMyProjectPage(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "6") int size,
+                                    Model model, Principal principal) {
         Optional<User> optionalUser = userRepository.findByEmail(principal.getName());
 
         if (optionalUser.isPresent()) {
-            model.addAttribute("username", optionalUser.get().getUsername());
+            User user = optionalUser.get();
+            model.addAttribute("username", user.getUsername());
+
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Project> projectPage = projectService.getProjectsByUser(user, pageable);
+            model.addAttribute("projects", projectPage.getContent());
+            model.addAttribute("currentPage", projectPage.getNumber());
+            model.addAttribute("totalPages", projectPage.getTotalPages());
+            model.addAttribute("totalItems", projectPage.getTotalElements());
         } else {
             model.addAttribute("username", "Unknown User");
+            model.addAttribute("projects", new ArrayList<>()); // 빈 리스트
         }
 
         return "view/myProject/myProject";
     }
 
+
     @GetMapping("/createProject")
     public String showCreateProjectForm(Model model, Principal principal) {
-        Optional<User> optionalUser = userRepository.findByEmail(principal.getName());
-        if (optionalUser.isPresent()) {
-            model.addAttribute("username", optionalUser.get().getUsername());
-        } else {
-            model.addAttribute("username", "Unknown User");
-        }
+        userRepository.findByEmail(principal.getName())
+                .ifPresentOrElse(
+                        user -> model.addAttribute("username", user.getUsername()),
+                        () -> model.addAttribute("username", "Unknown User")
+                );
         model.addAttribute("createProjectRequest", new CreateProjectRequest());
         return "view/myProject/createProjectForm";
     }
 
     @PostMapping("/createProject")
     public String createProject(@ModelAttribute CreateProjectRequest createProjectRequest, Principal principal) {
-        Optional<User> optionalUser = userRepository.findByEmail(principal.getName());
+        User teamLeader = userRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (optionalUser.isPresent()) {
-            User teamLeader = optionalUser.get();
+        // CreateProjectRequest를 Project 엔티티로 변환
+        Project project = new Project();
+        project.setProjectName(createProjectRequest.getProjectName());
+        project.setProjectDescription(createProjectRequest.getProjectDescription());
+        project.setProjectStatus(createProjectRequest.getProjectStatus());
+        project.setStartDate(createProjectRequest.getStartDate());
+        project.setEndDate(createProjectRequest.getEndDate());
+        project.setTeamLeader(teamLeader);
 
-            // CreateProjectRequest를 Project 엔티티로 변환
-            Project project = new Project();
-            project.setProjectName(createProjectRequest.getProjectName());
-            project.setProjectDescription(createProjectRequest.getProjectDescription());
-            project.setProjectStatus(createProjectRequest.getProjectStatus());
-            project.setStartDate(createProjectRequest.getStartDate());
-            project.setEndDate(createProjectRequest.getEndDate());
-            project.setTeamLeader(teamLeader);
+        // 프로젝트 멤버 추가
+        List<ProjectMember> projectMembers = new ArrayList<>();
+        projectMembers.add(createProjectMember(project, teamLeader, "Team Leader"));
 
-            // 프로젝트 멤버 추가
-            List<Long> memberIds = createProjectRequest.getMemberIds();
-            List<ProjectMember> projectMembers = new ArrayList<>();
-
-            // 팀 리더도 프로젝트 멤버로 추가
-            ProjectMember leaderMember = new ProjectMember();
-            leaderMember.setProject(project);
-            leaderMember.setUser(teamLeader);
-            leaderMember.setRole("Team Leader"); // 팀 리더 역할 설정
-            projectMembers.add(leaderMember);
-
-            if (memberIds != null) {
-                for (Long memberId : memberIds) {
-                    Optional<User> memberOptional = userRepository.findById(memberId);
-                    if (memberOptional.isPresent()) {
-                        ProjectMember projectMember = new ProjectMember();
-                        projectMember.setProject(project);
-                        projectMember.setUser(memberOptional.get());
-                        projectMembers.add(projectMember);
-                    }
-                }
-            }
-            project.setProjectMembers(projectMembers);
-
-
-            // 프로젝트 저장
-            projectService.saveProject(project);
-            return "redirect:/myProject";
-        } else {
-            // 예외 처리: 사용자 찾기 실패 시 적절한 메시지를 설정
-            return "redirect:/error";
+        if (createProjectRequest.getMemberIds() != null) {
+            createProjectRequest.getMemberIds().forEach(memberId -> {
+                userRepository.findById(memberId).ifPresent(member -> {
+                    projectMembers.add(createProjectMember(project, member, null));
+                });
+            });
         }
+
+        project.setProjectMembers(projectMembers);
+
+        // 프로젝트 저장
+        projectService.saveProject(project);
+        return "redirect:/myProject";
+    }
+
+    private ProjectMember createProjectMember(Project project, User user, String role) {
+        ProjectMember projectMember = new ProjectMember();
+        projectMember.setProject(project);
+        projectMember.setUser(user);
+        projectMember.setRole(role != null ? role : "Member");
+        return projectMember;
     }
 
     @GetMapping("/projects")
     public List<Project> getAllProjects() {
         return projectService.getAllProjects();
     }
+
 }

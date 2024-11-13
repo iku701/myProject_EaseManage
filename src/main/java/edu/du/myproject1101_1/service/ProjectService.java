@@ -6,6 +6,9 @@ import edu.du.myproject1101_1.entity.User;
 import edu.du.myproject1101_1.repository.ProjectRepository;
 import edu.du.myproject1101_1.repository.ProjectMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,5 +67,14 @@ public class ProjectService {
         projectMemberRepository.deleteByProjectIdAndUserId(projectId, userId);
     }
 
-    // 기타 필요한 메서드 추가
+    //
+    public List<Project> getProjectsByUser(User user) {
+        return projectRepository.findByTeamLeaderOrProjectMembers_User(user);
+    }
+
+    //페이징 처리
+    public Page<Project> getProjectsByUser(User user, Pageable pageable) {
+        return projectRepository.findByTeamLeaderOrProjectMembers_User(user, pageable);
+    }
+
 }
