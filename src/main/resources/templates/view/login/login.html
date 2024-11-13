@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/apple-icon.png">
@@ -18,8 +17,12 @@
     <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet" />
     <link th:href="@{/assets/css/login.css}" rel="stylesheet" />
     <link th:href="@{/assets/demo/demo.css}" rel="stylesheet" />
+    <style>
+        body, .wrapper {
+            background-color: #f4f3ef;
+        }
+    </style>
 </head>
-
 <body>
 <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
     <div class="container-fluid">
