@@ -131,14 +131,14 @@
         <!-- End Navbar -->
         <div class="content">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-8 mx-auto mt-5">
                     <div class="card card-user">
                         <div class="card-header">
                             <h5 class="card-title">Edit Profile</h5>
                         </div>
                         <div class="card-body">
-                            <form th:action="@{/update}" method="post" th:object="${userDto}">
-                                <input type="hidden" th:field="*{email}"/>
+                            <form th:action="@{/update}" method="post" th:object="${userDto}" onsubmit="return checkEmailChange();">
+                                <input type="hidden" id="originalEmail" th:value="${userDto.email}" />
 
                                 <div class="row">
                                     <div class="col-md-5 pr-1">
@@ -156,7 +156,7 @@
                                     <div class="col-md-4 pl-1">
                                         <div class="form-group">
                                             <label>Email address</label>
-                                            <input type="email" class="form-control" th:field="*{email}" placeholder="Email">
+                                            <input type="email" class="form-control" id="newEmail" th:field="*{email}" placeholder="Email">
                                         </div>
                                     </div>
                                 </div>
@@ -216,8 +216,22 @@
                                     </div>
                                 </div>
                             </form>
-
                         </div>
+<!--                        이메일 변경시 alert 확인여부-->
+                        <script>
+                            function checkEmailChange() {
+                                const originalEmail = document.getElementById('originalEmail').value;
+                                const newEmail = document.getElementById('newEmail').value;
+
+                                if (originalEmail !== newEmail) {
+                                    const confirmation = confirm('이메일을 변경하면 다시 로그인해야 합니다. 계속 진행하시겠습니까?');
+                                    if (!confirmation) {
+                                        return false; // 취소를 누르면 폼 제출 중단
+                                    }
+                                }
+                                return true; // 확인을 누르면 폼 제출 진행
+                            }
+                        </script>
                     </div>
                 </div>
             </div>

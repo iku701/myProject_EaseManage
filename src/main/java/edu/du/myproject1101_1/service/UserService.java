@@ -26,10 +26,17 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        // 비밀번호 암호화 추가
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            // 새 비밀번호가 있는 경우만 암호화
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.save(user);
     }
+
+    public User saveUserWithoutEncodingPassword(User user) {
+        return userRepository.save(user);
+    }
+
 
     public boolean isEmailExists(String email) {
         return userRepository.existsByEmail(email);

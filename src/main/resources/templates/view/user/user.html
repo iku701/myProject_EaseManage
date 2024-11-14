@@ -140,12 +140,13 @@
                 <div class="author">
                   <a href="#">
                     <img class="avatar border-gray" th:src="@{/assets/img/faces/clem-onojeghuo-2.jpg}" alt="...">
-                    <h5 class="title">Chet Faker</h5>
+                    <h5 class="title" th:text="${user.firstName + ' ' + user.lastName}">Chet Faker</h5>
                   </a>
-                  <p class="description">
+                  <p class="description" th:text="'@' + ${user.username}">
                     @chetfaker
                   </p>
                 </div>
+
                 <p class="description text-center">
                   "I like the way you work it <br>
                   No diggity <br>

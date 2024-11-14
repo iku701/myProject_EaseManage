@@ -6,6 +6,8 @@ import edu.du.myproject1101_1.entity.User;
 import edu.du.myproject1101_1.service.UserService;
 import edu.du.myproject1101_1.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,18 +53,31 @@ public class UserController {
         Optional<User> userOptional = userService.getUserByEmail(principal.getName());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            // DTO를 User 엔티티로 변환
+
+            // 이메일이 변경되었는지 확인
+            boolean isEmailChanged = !user.getEmail().equals(userDto.getEmail());
+
+            // 사용자 정보 업데이트
             user.setUsername(userDto.getUsername());
             user.setEmail(userDto.getEmail());
             user.setFirstName(userDto.getFirstName());
             user.setLastName(userDto.getLastName());
+            user.setCompany(userDto.getCompany());
             user.setAddress(userDto.getAddress());
             user.setCity(userDto.getCity());
             user.setCountry(userDto.getCountry());
             user.setPostalCode(userDto.getPostalCode());
             user.setAboutMe(userDto.getAboutMe());
 
-            userService.saveUser(user);
+            // 비밀번호는 유지
+            userService.saveUserWithoutEncodingPassword(user);
+
+            // 이메일이 변경된 경우에만 로그인 페이지로 리다이렉트
+            if (isEmailChanged) {
+                return "redirect:/login?emailUpdated=true";
+            }
+
+            // 이메일이 변경되지 않은 경우, 프로필 페이지로 리다이렉트
             return "redirect:/view/user";
         } else {
             return "view/error/error";
@@ -75,6 +90,7 @@ public class UserController {
         Optional<User> user = userService.getUserByEmail(principal.getName());
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
+            model.addAttribute("username", user.get().getUsername()); // username 추가
             return "view/user/user";
         } else {
             return "view/error/error";
@@ -92,11 +108,14 @@ public class UserController {
             userDto.setEmail(user.get().getEmail());
             userDto.setFirstName(user.get().getFirstName());
             userDto.setLastName(user.get().getLastName());
+            userDto.setCompany(user.get().getCompany());
             userDto.setAddress(user.get().getAddress());
             userDto.setCity(user.get().getCity());
             userDto.setCountry(user.get().getCountry());
             userDto.setPostalCode(user.get().getPostalCode());
             userDto.setAboutMe(user.get().getAboutMe());
+
+            model.addAttribute("username", user.get().getUsername());
 
             model.addAttribute("userDto", userDto);
             return "view/user/editProfile"; // editProfile.html의 뷰 경로
