@@ -4,18 +4,19 @@ import edu.du.myproject1101_1.dto.CreateProjectRequest;
 import edu.du.myproject1101_1.entity.Project;
 import edu.du.myproject1101_1.entity.ProjectMember;
 import edu.du.myproject1101_1.entity.User;
+import edu.du.myproject1101_1.exception.UserNotFoundException;
+import edu.du.myproject1101_1.exception.UnauthorizedAccessException;
 import edu.du.myproject1101_1.repository.UserRepository;
 import edu.du.myproject1101_1.service.ProjectService;
+import edu.du.myproject1101_1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/myProject")
     public String showMyProjectPage(@RequestParam(defaultValue = "0") int page,
@@ -55,7 +59,6 @@ public class ProjectController {
         return "view/myProject/myProject";
     }
 
-
     @GetMapping("/createProject")
     public String showCreateProjectForm(Model model, Principal principal) {
         userRepository.findByEmail(principal.getName())
@@ -70,7 +73,7 @@ public class ProjectController {
     @PostMapping("/createProject")
     public String createProject(@ModelAttribute CreateProjectRequest createProjectRequest, Principal principal) {
         User teamLeader = userRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // CreateProjectRequest를 Project 엔티티로 변환
         Project project = new Project();
@@ -104,13 +107,66 @@ public class ProjectController {
         ProjectMember projectMember = new ProjectMember();
         projectMember.setProject(project);
         projectMember.setUser(user);
-        projectMember.setRole(role != null ? role : "Member");
+        projectMember.setRole(role != null ? role : "Member"); // 기본값으로 "Member" 설정
         return projectMember;
     }
 
     @GetMapping("/projects")
     public List<Project> getAllProjects() {
         return projectService.getAllProjects();
+    }
+
+    //프로젝트별 정보 확인
+    @GetMapping("/myProjectForm/{id}")
+    public String showProjectDetails(@PathVariable Long id, Model model, Principal principal) {
+        Optional<Project> projectOptional = projectService.getProjectById(id);
+        if (projectOptional.isPresent()) {
+            Project project = projectOptional.get();
+            model.addAttribute("project", project);
+
+            // 로그인한 사용자 정보 추가 (필요한 경우)
+            userRepository.findByEmail(principal.getName())
+                    .ifPresentOrElse(
+                            user -> model.addAttribute("username", user.getUsername()),
+                            () -> model.addAttribute("username", "Unknown User")
+                    );
+
+            return "view/myProject/myProjectForm"; // myProjectFrom.html의 경로
+        } else {
+            return "view/error/error"; // 프로젝트를 찾지 못했을 경우 에러 페이지
+        }
+    }
+
+    @PostMapping("/addTeamMember")
+    public String addTeamMember(@RequestParam Long projectId, @RequestParam String email, Principal principal, RedirectAttributes redirectAttributes) {
+        // 현재 로그인된 사용자가 프로젝트 팀 리더인지 확인
+        User currentUser = userService.getUserByEmail(principal.getName()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        Project project = projectService.getProjectById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+
+        if (!project.getTeamLeader().equals(currentUser)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You do not have permission to add team members.");
+            return "redirect:/myProjectForm/" + projectId;
+        }
+
+        // 팀원 추가 시 이메일 확인
+        Optional<User> optionalNewMember = userService.getUserByEmail(email);
+        if (optionalNewMember.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "User with the provided email does not exist.");
+            return "redirect:/myProjectForm/" + projectId;
+        }
+
+        User newMember = optionalNewMember.get();
+
+        // 중복 체크
+        if (project.getProjectMembers().stream().anyMatch(member -> member.getUser().equals(newMember))) {
+            redirectAttributes.addFlashAttribute("errorMessage", "This user is already a team member.");
+            return "redirect:/myProjectForm/" + projectId;
+        }
+
+        projectService.addProjectMember(project, newMember);
+        redirectAttributes.addFlashAttribute("successMessage", "Team member added successfully.");
+
+        return "redirect:/myProjectForm/" + projectId;
     }
 
 }

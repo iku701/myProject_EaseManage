@@ -39,4 +39,7 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectMember> projectMembers; // 새로운 필드 추가
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectAnnouncement> projectAnnouncements; // ProjectAnnouncement 관계 추가
 }

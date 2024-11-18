@@ -23,7 +23,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/assets/**", "/js/**", "/images/**").permitAll() // 로그인, 회원가입, 정적 자원 허용
+                .antMatchers("/login", "/forgot-password", "/register", "/assets/**", "/js/**", "/images/**").permitAll() // 로그인, 회원가입,
+                // 정적 자원 허용
                 .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
                 .and()
                 .formLogin()

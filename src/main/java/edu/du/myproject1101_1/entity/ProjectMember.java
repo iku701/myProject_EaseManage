@@ -25,5 +25,8 @@ public class ProjectMember {
     private User user; // 필드 이름 변경
 
     @Column(nullable = false)
-    private String role; // 예: 'Developer', 'Tester', 'Manager' 등
+    private String role = "Member"; // 기본값 설정
+    // 예: 'Developer', 'Tester', 'Manager' 등
+
+
 }

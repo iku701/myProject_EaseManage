@@ -1,8 +1,10 @@
 package edu.du.myproject1101_1.service;
 
 import edu.du.myproject1101_1.entity.Project;
+import edu.du.myproject1101_1.entity.ProjectAnnouncement;
 import edu.du.myproject1101_1.entity.ProjectMember;
 import edu.du.myproject1101_1.entity.User;
+import edu.du.myproject1101_1.repository.ProjectAnnouncementRepository;
 import edu.du.myproject1101_1.repository.ProjectRepository;
 import edu.du.myproject1101_1.repository.ProjectMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class ProjectService {
 
     @Autowired
     private ProjectMemberRepository projectMemberRepository;
+
+    @Autowired
+    private ProjectAnnouncementRepository projectAnnouncementRepository;
 
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
@@ -56,6 +61,7 @@ public class ProjectService {
         ProjectMember projectMember = new ProjectMember();
         projectMember.setProject(project);
         projectMember.setUser(user);
+        projectMember.setRole("Member"); // 기본값 설정
         projectMemberRepository.save(projectMember);
     }
 
@@ -76,5 +82,11 @@ public class ProjectService {
     public Page<Project> getProjectsByUser(User user, Pageable pageable) {
         return projectRepository.findByTeamLeaderOrProjectMembers_User(user, pageable);
     }
+
+    //공지사항 저장
+    public void addAnnouncement(ProjectAnnouncement announcement) {
+        projectAnnouncementRepository.save(announcement);
+    }
+
 
 }

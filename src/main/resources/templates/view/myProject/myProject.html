@@ -150,13 +150,16 @@
                     <div class="card" style="margin-top: 30px;">
                         <div class="card-header">
                             <h5 class="card-title" th:text="${project.projectName}">Project Name</h5>
+                            <p class="card-category" th:text="'Leader: ' + ${project.teamLeader.firstName} + ' ' + ${project.teamLeader.lastName}">Leader</p>
                             <p class="card-category" th:text="'Status: ' + ${project.projectStatus}">Status</p>
                         </div>
                         <div class="card-body">
                             <p th:text="${project.projectDescription}">Project Description</p>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary btn-block" th:href="@{/projectDetails/{id}(id=${project.projectId})}">View Details</button>
+                            <a class="btn btn-primary btn-block"
+                               th:href="@{/myProjectForm/{id}(id=${project.projectId})}">View Project</a>
+
                         </div>
                     </div>
                 </div>

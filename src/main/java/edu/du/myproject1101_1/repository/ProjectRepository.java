@@ -13,10 +13,12 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    @Query("SELECT p FROM Project p LEFT JOIN p.projectMembers pm WHERE p.teamLeader = :user OR pm.user = :user")
+
+    @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.projectMembers pm WHERE p.teamLeader = :user OR pm.user = :user")
     List<Project> findByTeamLeaderOrProjectMembers_User(@Param("user") User user);
 
-    @Query("SELECT p FROM Project p LEFT JOIN p.projectMembers pm WHERE p.teamLeader = :user OR pm.user = :user")
+    @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.projectMembers pm WHERE p.teamLeader = :user OR pm.user = :user")
     Page<Project> findByTeamLeaderOrProjectMembers_User(User user, Pageable pageable);
 }
+
 
