@@ -48,23 +48,5 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public boolean sendPasswordResetEmail(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            String token = UUID.randomUUID().toString();
-            user.setResetToken(token);
-            user.setTokenExpiryDate(LocalDateTime.now().plusHours(1)); // 토큰 만료 시간 설정
-            userRepository.save(user);
-
-            // 이메일 전송 로직
-            String resetLink = "http://localhost:8080/reset-password?token=" + token;
-            String message = "Click the following link to reset your password: " + resetLink;
-            emailService.sendEmail(user.getEmail(), "Password Reset Request", message);
-
-            return true;
-        }
-        return false;
-    }
 
 }

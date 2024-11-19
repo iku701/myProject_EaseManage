@@ -88,5 +88,15 @@ public class ProjectService {
         projectAnnouncementRepository.save(announcement);
     }
 
+    //프로젝트 팀 멤버 삭제
+    public void removeProjectMember(Project project, ProjectMember member) {
+        project.getProjectMembers().remove(member);
+        projectMemberRepository.delete(member);
+        projectRepository.save(project);
+    }
 
+    // 사용자가 리더이거나 멤버로 포함된 모든 프로젝트 반환 메서드
+    public List<Project> getProjectsByUserInvolved(User user) {
+        return projectRepository.findProjectsByUserInvolved(user);
+    }
 }

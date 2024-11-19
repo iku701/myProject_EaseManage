@@ -154,13 +154,11 @@
                                 <h5>Project Leader</h5>
                                 <p th:text="${project.teamLeader.firstName} + ' ' + ${project.teamLeader.lastName}">Project Leader</p>
                                 <h5>Project Members</h5>
-                                <p th:each="member : ${project.projectMembers}"
-                                   th:if="${member.user.id} != ${project.teamLeader.id}"> <!-- 리더를 제외하는 조건 -->
+                                <p th:each="member : ${project.projectMembers}"> <!-- 리더를 제외하는 조건 -->
                                     <a th:href="@{/user/profile/{id}(id=${member.user.id})}" th:text="${member.user.firstName} + ' ' + ${member.user.lastName}"></a>
                                 </p>
                             </div>
                         </div>
-
                         <div class="row mt-3 mb-4 pb-3" style="border-bottom: 1px solid #e0e0e0;">
                             <div class="col-md-6">
                                 <h5>Start Date</h5>
@@ -178,15 +176,6 @@
                             </div>
                             <div class="col-md-3">
                                 <button class="btn btn-warning btn-block" onclick="location.href='dashboard.html'">Go to Dashboard</button>
-                            </div>
-                            <div class="col-md-3">
-                                <a class="btn btn-primary btn-block" th:href="@{/editProjectForm/{id}(id=${project.projectId})}">Edit Project</a>
-                            </div>
-
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#addTeamMemberModal">
-                                    Add Team Member
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -215,70 +204,6 @@
                                 </div>
                             </li>
                         </ul>
-                    </div>
-                </div>
-                <!-- 버튼을 카드 외부로 이동 -->
-                <div class="text-center mt-4">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAnnouncementModal">
-                        Add Announcement
-                    </button>
-                </div>
-            </div>
-
-            <!-- 모달 창 컨테이너 -->
-            <div class="container mt-4">
-
-                <!-- 팀 멤버 추가 모달 창 -->
-                <div class="modal fade" id="addTeamMemberModal" tabindex="-1" role="dialog" aria-labelledby="addTeamMemberModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addTeamMemberModalLabel">Add Team Member</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="addMemberForm" th:action="@{/addTeamMember}" method="post">
-                                    <div class="form-group">
-                                        <label for="teamMemberEmail">Team Member Email</label>
-                                        <input type="email" class="form-control" id="teamMemberEmail" name="email" required>
-                                        <button type="button" class="btn btn-secondary mt-2" onclick="checkEmail()">Check Email</button>
-                                        <small id="emailStatus" class="form-text text-muted"></small>
-                                    </div>
-                                    <input type="hidden" id="projectId" name="projectId" th:value="${project.projectId}">
-                                    <button type="submit" class="btn btn-primary">Add Member</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 공지사항 글 추가 모달 창 -->
-                <div class="modal fade" id="addAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="addAnnouncementModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addAnnouncementModalLabel">Add New Announcement</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form th:action="@{/addAnnouncement}" method="post">
-                                    <div class="form-group">
-                                        <label for="announcementTitle">Title</label>
-                                        <input type="text" class="form-control" id="announcementTitle" name="title" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="announcementContent">Content</label>
-                                        <textarea class="form-control" id="announcementContent" name="content" rows="4" required></textarea>
-                                    </div>
-                                    <input type="hidden" name="projectId" th:value="${project.projectId}">
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

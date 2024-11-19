@@ -4,6 +4,8 @@ import javax.persistence.*; // javax 패키지로 변경
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "user")
 @Setter
@@ -44,4 +46,5 @@ public class User {
 
     @Column(nullable = false)
     private String role = "USER"; // 기본 역할 설정
+
 }

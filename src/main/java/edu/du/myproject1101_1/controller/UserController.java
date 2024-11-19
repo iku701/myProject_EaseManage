@@ -1,13 +1,12 @@
 package edu.du.myproject1101_1.controller;
 
-import edu.du.myproject1101_1.dto.RegisterRequest;
 import edu.du.myproject1101_1.dto.UserProfileUpdateRequest;
+import edu.du.myproject1101_1.entity.Project;
 import edu.du.myproject1101_1.entity.User;
+import edu.du.myproject1101_1.service.ProjectService;
 import edu.du.myproject1101_1.service.UserService;
 import edu.du.myproject1101_1.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -30,14 +30,24 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 사용자 프로필 조회
-    @GetMapping("/{id}")
-    public String getUserProfile(@PathVariable Long id, Model model) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isPresent()) {
-            model.addAttribute("user", user.get());
-            return "view/user/user";
+    @Autowired
+    public ProjectService projectService;
+
+    // 사용자 프로필 조회와 함께 프로젝트 목록 반환
+    @GetMapping("/user/profile/{id}")
+    public String getUserProfileWithProjects(@PathVariable Long id, Model model) {
+        Optional<User> userOptional = userService.getUserById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+
+            // 사용자가 리더이거나 멤버로 포함된 모든 프로젝트 가져오기
+            List<Project> projects = projectService.getProjectsByUserInvolved(user);
+            model.addAttribute("projects", projects);
+
+            return "view/user/profile"; // profile.html 반환
         } else {
+            model.addAttribute("errorMessage", "User not found.");
             return "view/error/error";
         }
     }
@@ -47,7 +57,7 @@ public class UserController {
     public String updateUserProfile(@ModelAttribute @Valid UserProfileUpdateRequest userDto, BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
             model.addAttribute("userDto", userDto);
-            return "view/user/editProfile";
+            return "user";
         }
 
         Optional<User> userOptional = userService.getUserByEmail(principal.getName());
@@ -89,10 +99,17 @@ public class UserController {
     public String getLoggedInUserProfile(Model model, Principal principal) {
         Optional<User> user = userService.getUserByEmail(principal.getName());
         if (user.isPresent()) {
-            model.addAttribute("user", user.get());
-            model.addAttribute("username", user.get().getUsername()); // username 추가
+            User loggedInUser = user.get();
+            model.addAttribute("user", loggedInUser);
+            model.addAttribute("username", loggedInUser.getUsername()); // username 추가
+
+            // 사용자가 리더이거나 멤버로 포함된 모든 프로젝트 가져오기
+            List<Project> projects = projectService.getProjectsByUserInvolved(loggedInUser);
+            model.addAttribute("projects", projects);
+
             return "view/user/user";
         } else {
+            model.addAttribute("errorMessage", "User not found.");
             return "view/error/error";
         }
     }
@@ -123,4 +140,6 @@ public class UserController {
             return "view/error/error";
         }
     }
+
+
 }

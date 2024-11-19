@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -124,18 +126,33 @@ public class ProjectController {
             Project project = projectOptional.get();
             model.addAttribute("project", project);
 
-            // 로그인한 사용자 정보 추가 (필요한 경우)
-            userRepository.findByEmail(principal.getName())
-                    .ifPresentOrElse(
-                            user -> model.addAttribute("username", user.getUsername()),
-                            () -> model.addAttribute("username", "Unknown User")
-                    );
+            // 로그인한 사용자 정보 추가
+            User currentUser = userRepository.findByEmail(principal.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-            return "view/myProject/myProjectForm"; // myProjectFrom.html의 경로
+            // 역할에 따라 적절한 페이지 반환
+            if (project.getTeamLeader().equals(currentUser)) {
+                // 사용자가 프로젝트의 팀 리더인 경우
+                model.addAttribute("username", currentUser.getUsername());
+                return "view/myProject/myProjectForm"; // 팀 리더용 페이지
+            } else {
+                // 사용자가 팀 멤버인 경우
+                boolean isMember = project.getProjectMembers().stream()
+                        .anyMatch(member -> member.getUser().equals(currentUser));
+                if (isMember) {
+                    model.addAttribute("username", currentUser.getUsername());
+                    return "view/myProject/myProjectFormByTeamMember"; // 팀 멤버용 페이지
+                } else {
+                    model.addAttribute("errorMessage", "You do not have permission to view this project.");
+                    return "view/error/error"; // 권한이 없는 경우 에러 페이지
+                }
+            }
         } else {
+            model.addAttribute("errorMessage", "Project not found.");
             return "view/error/error"; // 프로젝트를 찾지 못했을 경우 에러 페이지
         }
     }
+
 
     @PostMapping("/addTeamMember")
     public String addTeamMember(@RequestParam Long projectId, @RequestParam String email, Principal principal, RedirectAttributes redirectAttributes) {
@@ -167,6 +184,53 @@ public class ProjectController {
         redirectAttributes.addFlashAttribute("successMessage", "Team member added successfully.");
 
         return "redirect:/myProjectForm/" + projectId;
+    }
+
+    @GetMapping("/editProjectForm/{id}")
+    public String showEditProjectForm(@PathVariable Long id, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        Optional<Project> projectOptional = projectService.getProjectById(id);
+        if (projectOptional.isPresent()) {
+            Project project = projectOptional.get();
+            User currentUser = userRepository.findByEmail(principal.getName())
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+            // 현재 사용자가 팀 리더인지 확인
+            if (project.getTeamLeader().equals(currentUser)) {
+                model.addAttribute("project", project);
+                model.addAttribute("username", currentUser.getUsername());
+                return "view/myProject/editProjectForm"; // 프로젝트 편집 폼의 경로
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "You do not have permission to edit this project.");
+                return "redirect:/myProjectForm/" + id;
+            }
+        } else {
+            model.addAttribute("errorMessage", "Project not found.");
+            return "view/error/error";
+        }
+    }
+
+    //프로젝트 팀 멤버 삭제
+    @DeleteMapping("/removeTeamMember")
+    public ResponseEntity<String> removeTeamMember(@RequestParam Long projectId, @RequestParam String email, Principal principal) {
+        // 현재 로그인한 사용자가 프로젝트의 팀 리더인지 확인
+        User currentUser = userService.getUserByEmail(principal.getName()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        Project project = projectService.getProjectById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+
+        if (!project.getTeamLeader().equals(currentUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to remove team members.");
+        }
+
+        // 삭제할 팀 멤버 찾기
+        Optional<ProjectMember> memberToRemove = project.getProjectMembers().stream()
+                .filter(member -> member.getUser().getEmail().equals(email))
+                .findFirst();
+
+        if (memberToRemove.isPresent()) {
+            projectService.removeProjectMember(project, memberToRemove.get());
+            return ResponseEntity.ok("Member removed successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found.");
+        }
     }
 
 }

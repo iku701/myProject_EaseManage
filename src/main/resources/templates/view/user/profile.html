@@ -19,7 +19,6 @@
   <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
   <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
 </head>
-
 <body class="">
   <div class="wrapper ">
     <div class="sidebar" data-color="white" data-active-color="danger">
@@ -60,9 +59,9 @@
             </a>
           </li>
           <li class="active">
-            <a th:href="@{/view/user}">
+            <a>
               <i class="nc-icon nc-single-02"></i>
-              <p th:text="${username}"></p>
+              <p>Other Users</p>
             </a>
           </li>
           <li class="active-pro">
@@ -86,7 +85,7 @@
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="javascript:;">My Profile</a>
+            <a class="navbar-brand" href="javascript:;">Profile</a>
           </div>
           <div class="collapse navbar-collapse justify-content-end" id="navigation">
             <form class="form-inline" style="margin-right: 20px; flex: 1;">
@@ -192,11 +191,12 @@
                 </ul>
               </div>
             </div>
+
           </div>
           <div class="col-md-8">
             <div class="card card-user">
               <div class="card-header">
-                <h5 class="card-title">Edit Profile</h5>
+                <h5 class="card-title" th:text="${user.username} + ' _  Profile'">Profile</h5>
               </div>
               <div class="card-body">
                 <form>
@@ -268,11 +268,6 @@
                         <label>About Me</label>
                         <textarea class="form-control textarea" th:text="${user.aboutMe}" disabled></textarea>
                       </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="update ml-auto mr-auto">
-                      <a th:href="@{/editProfile}" class="btn btn-primary btn-round" style="width: 130px; padding: 10px 16px;">Edit Profile</a>
                     </div>
                   </div>
                 </form>
