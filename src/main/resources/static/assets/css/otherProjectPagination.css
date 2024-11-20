@@ -1,0 +1,54 @@
+.custom-page-link {
+    background-color: white;
+    color: black;
+    border-color: white;
+}
+
+.custom-page-link:hover {
+    /*background-color: black;*/
+    color: white;
+}
+
+.page-item.active .custom-page-link {
+    background-color: #51cbce; /* 선택된 페이지의 배경색 */
+    color: white; /* 선택된 페이지의 글자색 */
+    border-color: #b3d7ff;
+}
+
+
+.table-responsive {
+    overflow-y: hidden; /* 테이블의 세로 스크롤 제거 */
+    overflow-x: hidden;
+}
+
+.table td, .table th {
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 말줄임 표시 */
+    max-width: 200px; /* 열의 최대 너비 설정 (필요에 따라 변경) */
+}
+
+.table tr {
+    height: 50px; /* 행 높이 고정 */
+}
+
+.table th {
+    text-align: center; /* 헤더 중앙 정렬 */
+}
+
+/* 프로젝트 이름 링크 기본 스타일 */
+.project-link {
+    text-decoration: none;
+    color: #000; /* 기본 글자 색 */
+    transition: color 0.3s ease, background-color 0.3s ease; /* 부드러운 효과 */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* 마우스 오버 시 효과 */
+.project-link:hover {
+    color: #fff; /* 글자색 흰색 */
+    background-color: #51cbce; /* 배경색 파란색 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+}
+

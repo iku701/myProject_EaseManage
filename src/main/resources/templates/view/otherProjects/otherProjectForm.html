@@ -35,7 +35,7 @@
         </div>
         <div class="sidebar-wrapper">
             <ul class="nav">
-                <li class="active">
+                <li>
                     <a th:href="@{/myProject}">
                         <i class="nc-icon nc-paper"></i>
                         <p>My Project</p>
@@ -47,7 +47,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a th:href="@{/view/otherProjects}">
                         <i class="nc-icon nc-bullet-list-67"></i>
                         <p>Other Project</p>
@@ -86,7 +86,7 @@
         <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
-                    <a class="navbar-brand" href="javascript:;">My Project</a>
+                    <a class="navbar-brand" href="javascript:;">Other Project</a>
                 </div>
                 <div class="collapse navbar-collapse justify-content-end" id="navigation">
                     <form class="form-inline" style="margin-right: 20px; flex: 1;">
@@ -137,7 +137,7 @@
             <div th:if="${successMessage}" class="alert alert-success" role="alert">
                 <span th:text="${successMessage}"></span>
             </div>
-            <div class="container">
+            <div class="container" style="margin-top: 200px;">
                 <div class="card">
                     <div class="card-header" style="background-color: #f7f7f7; border-bottom: 2px solid #ddd; border-top-left-radius: 10px; border-top-right-radius: 10px;">
                         <h4 class="card-title">Project Name: <span th:text="${project.projectName}">Project Name</span></h4>
@@ -155,7 +155,7 @@
                                 <p th:text="${project.teamLeader.username}">Project
                                     Leader</p>
                                 <h5>Project Members</h5>
-                                <p th:each="member : ${project.projectMembers}"> <!-- 리더를 제외하는 조건 -->
+                                <p th:each="member : ${project.projectMembers}">
                                     <a th:href="@{/user/profile/{id}(id=${member.user.id})}"
                                        th:text="${member.user.username}"></a>
                                 </p>
@@ -174,111 +174,8 @@
                         </div>
                         <!-- Navigation Buttons -->
                         <div class="row mt-4">
-                            <div class="col-md-3">
-                                <button class="btn btn-info btn-block" onclick="location.href='projectBoard.html'">Project Board</button>
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-warning btn-block" onclick="location.href='dashboard.html'">Go to Dashboard</button>
-                            </div>
-                            <div class="col-md-3">
-                                <a class="btn btn-primary btn-block" th:href="@{/editProjectForm/{id}(id=${project.projectId})}">Edit Project</a>
-                            </div>
-
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#addTeamMemberModal">
-                                    Add Team Member
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container mt-5">
-                <!-- 공지사항 리스트 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Project Announcements</h5>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group mb-3">
-                            <li th:each="announcement : ${project.projectAnnouncements}" class="list-group-item">
-                                <div>
-                                    <h6 th:text="${announcement.title}">Announcement Title</h6>
-                                    <p th:text="${announcement.content}">Announcement Content</p>
-                                    <small class="text-muted">
-                                        <strong>Author:</strong> <span
-                                            th:text="${announcement.author.username}">Author Name</span>   |
-                                        <strong>Created At:</strong> <span
-                                            th:text="${announcement.createdAt}"></span>   |
-                                        <strong>Last Updated:</strong> <span th:text="${announcement.updatedAt}"></span>
-                                    </small>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAnnouncementModal">
-                            Add Announcement
-                        </button>
-                    </div>
-                </div>
-                <!-- 버튼을 카드 외부로 이동 -->
-
-            </div>
-
-            <!-- 모달 창 컨테이너 -->
-            <div class="container mt-4">
-
-                <!-- 팀 멤버 추가 모달 창 -->
-                <div class="modal fade" id="addTeamMemberModal" tabindex="-1" role="dialog" aria-labelledby="addTeamMemberModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addTeamMemberModalLabel">Add Team Member</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="addMemberForm" th:action="@{/addTeamMember}" method="post">
-                                    <div class="form-group">
-                                        <label for="teamMemberEmail">Team Member Email</label>
-                                        <input type="email" class="form-control" id="teamMemberEmail" name="email" required>
-                                        <button type="button" class="btn btn-secondary mt-2" onclick="checkEmail()">Check Email</button>
-                                        <small id="emailStatus" class="form-text text-muted"></small>
-                                    </div>
-                                    <input type="hidden" id="projectId" name="projectId" th:value="${project.projectId}">
-                                    <button type="submit" class="btn btn-primary">Add Member</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 공지사항 글 추가 모달 창 -->
-                <div class="modal fade" id="addAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="addAnnouncementModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addAnnouncementModalLabel">Add New Announcement</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form th:action="@{/addAnnouncement}" method="post">
-                                    <div class="form-group">
-                                        <label for="announcementTitle">Title</label>
-                                        <input type="text" class="form-control" id="announcementTitle" name="title" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="announcementContent">Content</label>
-                                        <textarea class="form-control" id="announcementContent" name="content" rows="4" required></textarea>
-                                    </div>
-                                    <input type="hidden" name="projectId" th:value="${project.projectId}">
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                </form>
+                            <div class="col-md-12 d-flex justify-content-center">
+                                <button class="btn btn-success btn-block" style="max-width: 200px;">Join</button>
                             </div>
                         </div>
                     </div>
@@ -311,6 +208,5 @@
 <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
 <!-- Main Dashboard Script -->
 <script th:src="@{/assets/js/paper-dashboard.js}"></script>
-<script th:src="@{/assets/js/plugins/checkEmail.js}"></script>
 </body>
 </html>

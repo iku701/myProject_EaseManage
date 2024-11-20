@@ -14,3 +14,11 @@
     color: white; /* 선택된 페이지의 글자색 */
     border-color: #b3d7ff;
 }
+
+
+.table-responsive {
+    overflow-y: hidden; /* 테이블의 세로 스크롤 제거 */
+    overflow-x: hidden;
+}
+
+

@@ -228,7 +228,12 @@
                                        th:value="${project.endDate}" required>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block">Save Project</button>
+                            <div class="form-group text-center">
+                                <!-- Save and Cancel Buttons -->
+                                <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Save
+                                    Project</button>
+                                <a th:href="@{/myProjectForm/{id}(id=${project.projectId})}" class="btn btn-secondary">Cancel</a>
+                            </div>
                         </form>
                     </div>
                 </div>

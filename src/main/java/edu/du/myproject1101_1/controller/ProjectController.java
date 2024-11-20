@@ -17,10 +17,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.beans.PropertyEditorSupport;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -191,14 +195,13 @@ public class ProjectController {
         Optional<Project> projectOptional = projectService.getProjectById(id);
         if (projectOptional.isPresent()) {
             Project project = projectOptional.get();
-            User currentUser = userRepository.findByEmail(principal.getName())
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+            User currentUser = userService.getUserByEmail(principal.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-            // 현재 사용자가 팀 리더인지 확인
             if (project.getTeamLeader().equals(currentUser)) {
                 model.addAttribute("project", project);
                 model.addAttribute("username", currentUser.getUsername());
-                return "view/myProject/editProjectForm"; // 프로젝트 편집 폼의 경로
+                return "view/myProject/editProjectForm";
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "You do not have permission to edit this project.");
                 return "redirect:/myProjectForm/" + id;
@@ -209,6 +212,27 @@ public class ProjectController {
         }
     }
 
+    @PostMapping("/updateProject")
+    public String updateProject(@ModelAttribute Project updatedProject, RedirectAttributes redirectAttributes) {
+        try {
+            projectService.updateProject(updatedProject.getProjectId(), updatedProject);
+            redirectAttributes.addFlashAttribute("successMessage", "Project updated successfully.");
+            return "redirect:/myProjectForm/" + updatedProject.getProjectId();
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/editProjectForm/" + updatedProject.getProjectId();
+        }
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                setValue(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            }
+        });
+    }
     //프로젝트 팀 멤버 삭제
     @DeleteMapping("/removeTeamMember")
     public ResponseEntity<String> removeTeamMember(@RequestParam Long projectId, @RequestParam String email, Principal principal) {

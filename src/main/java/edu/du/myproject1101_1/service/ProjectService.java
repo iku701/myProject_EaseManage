@@ -95,8 +95,44 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    // 사용자가 리더이거나 멤버로 포함된 모든 프로젝트 반환 메서드
+    // 사용자가 리더이거나 멤버로 포함된 모든 프로젝트 반환(myProject)
     public List<Project> getProjectsByUserInvolved(User user) {
         return projectRepository.findProjectsByUserInvolved(user);
     }
+
+    //사용자가 리더이거나 멤버로 포함된 프로젝트를 제외한 다른 모든 프로젝트 반환(otherProject)
+    public List<Project> getProjectsExcludingUserInvolved(User user) {
+        List<Project> allProjects = projectRepository.findAll();
+        List<Project> userProjects = projectRepository.findByTeamLeaderOrProjectMembers_User(user);
+        allProjects.removeAll(userProjects); // 사용자가 참여한 프로젝트 제거
+        return allProjects;
+    }
+
+    public Page<Project> getPagedProjectsExcludingUserInvolved(User user, Pageable pageable) {
+        List<Project> userProjects = projectRepository.findByTeamLeaderOrProjectMembers_User(user);
+        List<Long> userProjectIds = userProjects.stream().map(Project::getProjectId).toList();
+
+        return projectRepository.findByProjectIdNotIn(userProjectIds, pageable);
+    }
+
+    // 텍스트 길이 제한 메서드
+    public String truncateText(String text, int maxLength) {
+        if (text.length() > maxLength) {
+            return text.substring(0, maxLength) + "...";
+        }
+        return text;
+    }
+
+    // 사용자와 연관된 프로젝트 데이터 가공 예시
+    public Page<Project> getPagedTruncatedProjectsExcludingUserInvolved(User user, Pageable pageable, int nameLimit, int statusLimit) {
+        Page<Project> projects = getPagedProjectsExcludingUserInvolved(user, pageable);
+        projects.forEach(project -> {
+            project.setProjectName(truncateText(project.getProjectName(), nameLimit));
+            project.setProjectStatus(truncateText(project.getProjectStatus(), statusLimit));
+        });
+        return projects;
+    }
+
+
+
 }

@@ -25,6 +25,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // 사용자가 리더이거나 멤버로 포함된 모든 프로젝트 반환 메서드
     @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.projectMembers pm WHERE p.teamLeader = :user OR pm.user = :user")
     List<Project> findProjectsByUserInvolved(@Param("user") User user);
+
+    // 프로젝트 ID 목록에 포함되지 않은 프로젝트를 페이징 처리하여 반환
+    Page<Project> findByProjectIdNotIn(List<Long> projectIds, Pageable pageable);
+
 }
 
 

@@ -18,7 +18,7 @@
   <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet"/>
   <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
   <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
-  <link th:href="@{/assets/css/pagination.css}" rel="stylesheet"/>
+  <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="wrapper ">
@@ -131,7 +131,6 @@
     <!-- End Navbar -->
     <div class="content">
       <div class="row">
-        <!-- Project list content here -->
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
@@ -140,48 +139,69 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table">
+                <table class="table" style="table-layout: fixed; width: 120%;">
                   <thead class="text-primary">
-                  <th>Project Name</th>
-                  <th>Username</th>
-                  <th>Status</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
-                  <th>Actions</th>
+                  <tr>
+                    <th style="width: 20%; text-align: left;">
+                      <a th:href="@{/view/otherProjects(sort='projectName', direction=${sort == 'projectName' && direction == 'asc' ? 'desc' : 'asc'}, page=${currentPage})}">
+                        Project Name
+                        <span th:text="${sort == 'projectName' ? (direction == 'asc' ? '▲' : '▼') : ''}"></span>
+                      </a>
+                    </th>
+                    <th style="width: 15%; text-align: left;">
+                      <a th:href="@{/view/otherProjects(sort='teamLeader', direction=${sort == 'teamLeader' && direction == 'asc' ? 'desc' : 'asc'}, page=${currentPage})}">
+                        Leader
+                        <span th:text="${sort == 'teamLeader' ? (direction == 'asc' ? '▲' : '▼') : ''}"></span>
+                      </a>
+                    </th>
+                    <th style="width: 15%; text-align: left;">
+                      <a th:href="@{/view/otherProjects(sort='projectStatus', direction=${sort == 'projectStatus' && direction == 'asc' ? 'desc' : 'asc'}, page=${currentPage})}">
+                        Status
+                        <span th:text="${sort == 'projectStatus' ? (direction == 'asc' ? '▲' : '▼') : ''}"></span>
+                      </a>
+                    </th>
+                    <th style="width: 10%; text-align: left;">
+                      <a th:href="@{/view/otherProjects(sort='startDate', direction=${sort == 'startDate' && direction == 'asc' ? 'desc' : 'asc'}, page=${currentPage})}">
+                        Start Date
+                        <span th:text="${sort == 'startDate' ? (direction == 'asc' ? '▲' : '▼') : ''}"></span>
+                      </a>
+                    </th>
+                    <th style="width: 10%; text-align: left;">
+                      <a th:href="@{/view/otherProjects(sort='endDate', direction=${sort == 'endDate' && direction == 'asc' ? 'desc' : 'asc'}, page=${currentPage})}">
+                        End Date
+                        <span th:text="${sort == 'endDate' ? (direction == 'asc' ? '▲' : '▼') : ''}"></span>
+                      </a>
+                    </th>
+                    <th style="width: 20%; text-align: left;">Actions</th>
+                  </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>Project Alpha</td>
-                    <td>JohnDoe</td>
-                    <td>In Progress</td>
-                    <td>2024-01-15</td>
-                    <td>2024-06-30</td>
-                    <td><button class="btn btn-sm btn-info">View</button></td>
+                  <tr th:each="project : ${projects}">
+                    <!-- 프로젝트 이름 -->
+                    <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                      <a th:href="@{/view/otherProjectForm/{id}(id=${project.projectId})}"
+                         class="project-link"
+                         th:text="${project.projectName}">Project Name</a>
+                    </td>
+
+                    <!-- 리더 이름 -->
+                    <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" th:text="${project.teamLeader.username}">Leader</td>
+
+                    <!-- 상태 -->
+                    <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" th:text="${project.projectStatus}">Status</td>
+
+                    <!-- 시작 날짜 -->
+                    <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" th:text="${project.startDate}">Start Date</td>
+
+                    <!-- 종료 날짜 -->
+                    <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" th:text="${project.endDate}">End Date</td>
+
+                    <!-- View 버튼 -->
+                    <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                      <a th:href="@{/view/otherProjectForm/{id}(id=${project.projectId})}" class="btn btn-sm btn-info">View</a>
+                    </td>
                   </tr>
-                  <tr>
-                    <td>Software Development</td>
-                    <td>MichaelBrown</td>
-                    <td>Completed</td>
-                    <td>2023-03-01</td>
-                    <td>2023-11-01</td>
-                    <td><button class="btn btn-sm btn-info">View</button></td>
-                  </tr>
-                  <tr>
-                    <td>이벤트 기획</td>
-                    <td>박준호</td>
-                    <td>예정</td>
-                    <td>2024-06-01</td>
-                    <td>2024-07-30</td>
-                    <td><button class="btn btn-sm btn-info">View</button></td>
-                  </tr>
-                  <tr>
-                    <td>여행 블로그 웹사이트</td>
-                    <td>김민아</td>
-                    <td>개발 중</td>
-                    <td>2024-03-15</td>
-                    <td>2024-08-15</td>
-                    <td><button class="btn btn-sm btn-info">View</button></td>
-                  </tr>
+
                   </tbody>
                 </table>
               </div>
@@ -189,7 +209,36 @@
           </div>
         </div>
       </div>
+      <!-- Pagination -->
+      <ul class="pagination justify-content-center" style="margin-top: 20px;">
+        <!-- 이전 페이지 -->
+        <li class="page-item" th:if="${currentPage > 0}">
+          <a class="page-link custom-page-link"
+             th:href="@{/view/otherProjects(page=${currentPage - 1}, sort=${sort}, direction=${direction})}"
+             aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <!-- 페이지 번호 -->
+        <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${pageNum == currentPage} ? 'active'">
+          <a class="page-link custom-page-link"
+             th:href="@{/view/otherProjects(page=${pageNum}, sort=${sort}, direction=${direction})}"
+             th:text="${pageNum + 1}">1</a>
+        </li>
+
+        <!-- 다음 페이지 -->
+        <li class="page-item" th:if="${currentPage < totalPages - 1}">
+          <a class="page-link custom-page-link"
+             th:href="@{/view/otherProjects(page=${currentPage + 1}, sort=${sort}, direction=${direction})}"
+             aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
     </div>
+
   </div>
   <footer class="footer footer-black  footer-white">
     <div class="container-fluid">
