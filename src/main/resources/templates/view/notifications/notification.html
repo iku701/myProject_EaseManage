@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
+  <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>
+    Ease Management
+  </title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+        name='viewport'/>
+  <!-- Fonts and icons -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet"/>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <!-- CSS Files -->
+  <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet"/>
+  <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet"/>
+  <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
+  <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
+  <link th:href="@{/assets/css/pagination.css}" rel="stylesheet"/>
+</head>
+<body class="">
+<div class="wrapper">
+  <div class="sidebar" data-color="white" data-active-color="danger">
+    <div class="logo">
+      <a class="simple-text logo-mini">
+        <div class="logo-image-small">
+          <img th:src="@{/assets/img/apple-icon.png}">
+        </div>
+      </a>
+      <a class="simple-text logo-normal">
+        Ease Management
+      </a>
+    </div>
+    <div class="sidebar-wrapper">
+      <ul class="nav">
+        <li>
+          <a th:href="@{/myProject}">
+            <i class="nc-icon nc-paper"></i>
+            <p>My Project</p>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{dashboard}">
+            <i class="nc-icon nc-bank"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/view/otherProjects}">
+            <i class="nc-icon nc-bullet-list-67"></i>
+            <p>Other Project</p>
+          </a>
+        </li>
+        <li class="active">
+          <a th:href="@{/view/notifications}">
+            <i class="nc-icon nc-bell-55"></i>
+            <p>Notification</p>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/view/user}">
+            <i class="nc-icon nc-single-02"></i>
+            <p th:text="${username}"></p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a th:href="@{/view/upgrade}">
+            <i class="nc-icon nc-spaceship"></i>
+            <p>Upgrade to PRO</p>
+          </a>
+        </li>
+        <!-- 로그아웃 -->
+        <li class="logout">
+          <a th:href="@{/logout}">
+            <i class="nc-icon nc-button-power"></i>
+            <p>Logout</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="main-panel">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+      <div class="container-fluid">
+        <div class="navbar-wrapper">
+          <a class="navbar-brand" href="javascript:;">Notification</a>
+        </div>
+        <div class="collapse navbar-collapse justify-content-end" id="navigation">
+          <form class="form-inline" style="margin-right: 20px; flex: 1;">
+            <div class="input-group no-border" style="width: 100%; max-width: 500px;">
+              <input type="text" class="form-control" placeholder="Search..." style="width: 100%;">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="nc-icon nc-zoom-split"></i>
+                </div>
+              </div>
+            </div>
+          </form>
+          <ul class="navbar-nav">
+            <li class="nav-item" style="margin-right: 15px;">
+              <a class="nav-link btn-magnify" href="javascript:;">
+                <i class="nc-icon nc-layout-11"></i>
+                <span class="d-lg-none d-md-block">Stats</span>
+              </a>
+            </li>
+            <li class="nav-item btn-rotate dropdown" style="margin-right: 15px;">
+              <a class="nav-link dropdown-toggle" href="javascript:;" id="navbarDropdownMenuLink"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="nc-icon nc-bell-55"></i>
+                <span class="d-lg-none d-md-block">Notifications</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn-rotate" href="javascript:;">
+                <i class="nc-icon nc-settings-gear-65"></i>
+                <span class="d-lg-none d-md-block">Account</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">EM Announcement</h5>
+              <p class="card-category">Important updates and announcements related to your projects</p>
+            </div>
+            <div class="card-body">
+              <!-- Notification items -->
+              <div class="alert alert-info">
+                <span><b> Update - </b> New project guidelines have been released for 2024.</span>
+              </div>
+              <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                  <i class="nc-icon nc-simple-remove"></i>
+                </button>
+                <span><b> Success - </b> Project Alpha has been successfully completed.</span>
+              </div>
+              <div class="alert alert-warning alert-dismissible fade show">
+                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                  <i class="nc-icon nc-simple-remove"></i>
+                </button>
+                <span><b> Warning - </b> Upcoming deadlines: Submit your reports by the end of this month.</span>
+              </div>
+              <div class="alert alert-danger alert-dismissible fade show">
+                <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                  <i class="nc-icon nc-simple-remove"></i>
+                </button>
+                <span><b> Alert - </b> System maintenance is scheduled for 2024-03-15. Expect downtime during this period.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Custom board area for project-related posts -->
+      <div class="row">
+        <!-- Announcements Section -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Public Announcement</h5>
+              <p class="card-category">Stay updated with important project announcements</p>
+            </div>
+            <div class="card-body">
+              <!-- Announcement Items -->
+              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: Team Leader</b></h6>
+                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">Backend Developer Needed for Project X</a></h6>
+                <p>Our current project requires an additional backend developer with experience in Java/Spring Boot. Interested members, please DM for more details.</p>
+              </div>
+              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: Project Manager</b></h6>
+                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">Looking for a UI/UX Designer</a></h6>
+                <p>We need a skilled UI/UX designer to help enhance the project's interface. Please reach out if you're interested in collaborating.</p>
+              </div>
+              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: Team Alpha</b></h6>
+                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">Seeking QA Testers for Final Phase</a></h6>
+                <p>As we approach the final stage of our project, we are looking for QA testers. If you have experience in test case development, please contact us.</p>
+              </div>
+              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: 김영수</b></h6>
+                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">프로젝트 Y를 위한 프론트엔드 개발자 모집</a></h6>
+                <p>React 또는 Vue.js 경험이 있는 프론트엔드 개발자를 찾고 있습니다. 관심 있는 분은 메시지 주세요.</p>
+              </div>
+              <div class="announcement">
+                <h6><b>Posted by: 박미진</b></h6>
+                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">데이터 분석 지원자 모집 공고</a></h6>
+                <p>프로젝트의 데이터 분석을 위해 Python과 Pandas 사용 가능자를 모집 중입니다. 참여 의향이 있는 분은 DM으로 연락해 주세요.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 자유게시판 Section -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Community Post</h5>
+              <p class="card-category">Post and discuss freely with your team</p>
+            </div>
+            <div class="card-body">
+              <!-- 자유게시판 Items -->
+              <div class="post" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: Jane Doe</b></h6>
+                <h6><b>Title:</b> <a href="postForm.html" target="_blank">Tips for Effective Team Collaboration</a></h6>
+                <p>Here are some tips I've found helpful for team collaboration. Share your thoughts!</p>
+              </div>
+              <div class="post" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: John Smith</b></h6>
+                <h6><b>Title:</b> <a href="postForm.html" target="_blank">Favorite Development Tools?</a></h6>
+                <p>What tools do you all use for development? I'm looking for recommendations.</p>
+              </div>
+              <div class="post" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: Alice Lee</b></h6>
+                <h6><b>Title:</b> <a href="postForm.html" target="_blank">Weekend Coding Challenges</a></h6>
+                <p>Let's start a weekend coding challenge! Who's interested?</p>
+              </div>
+              <div class="post" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by: 김철수</b></h6>
+                <h6><b>Title:</b> <a href="postForm.html" target="_blank">추천받은 도서 공유</a></h6>
+                <p>최근에 읽은 좋은 프로그래밍 관련 도서를 공유합니다. 같이 얘기해봐요!</p>
+              </div>
+              <div class="post">
+                <h6><b>Posted by: 박지수</b></h6>
+                <h6><b>Title:</b> <a href="postForm.html" target="_blank">새로운 코딩 기술 소개</a></h6>
+                <p>최근 공부한 흥미로운 기술을 공유합니다. 함께 의견을 나누어요!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Announcements Form -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">New Public Announcement</h5>
+              <p class="card-category">Post a new announcement to share with your project team</p>
+            </div>
+            <div class="card-body">
+              <form th:action="@{/postAnnouncement}" method="post">
+                <div class="form-group">
+                  <label for="announcementTitle">Title</label>
+                  <input type="text" class="form-control" id="announcementTitle" name="title" placeholder="Enter announcement title" required>
+                </div>
+                <div class="form-group">
+                  <label for="announcementContent">Content</label>
+                  <textarea class="form-control" id="announcementContent" name="content" rows="4" placeholder="Enter announcement content" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Post Announcement</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- 자유게시판 Form -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">New Community Post</h5>
+              <p class="card-category">Share your thoughts with the community</p>
+            </div>
+            <div class="card-body">
+              <form th:action="@{/postCommunityPost}" method="post">
+                <div class="form-group">
+                  <label for="postTitle">Title</label>
+                  <input type="text" class="form-control" id="postTitle" name="title" placeholder="Enter post title" required>
+                </div>
+                <div class="form-group">
+                  <label for="postContent">Content</label>
+                  <textarea class="form-control" id="postContent" name="content" rows="4" placeholder="Enter post content" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">Post to Community</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+    <footer class="footer footer-black  footer-white">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>, made with <i class="fa fa-heart heart"></i> by E.M
+              </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+</div>
+  <!-- Core JS Files -->
+  <script th:src="@{/assets/js/core/jquery.min.js}"></script>
+  <script th:src="@{/assets/js/core/popper.min.js}"></script>
+  <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+  <!-- Include Perfect Scrollbar before paper-dashboard -->
+  <script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
+  <!-- Chart JS -->
+  <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
+  <!-- Main Dashboard Script -->
+  <script th:src="@{/assets/js/paper-dashboard.js}"></script>
+<script>
+  // Example of showing a notification
+  function showCustomNotification(message, type) {
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: message
+    }, {
+      type: type,
+      timer: 3000,
+      placement: {
+        from: "top",
+        align: "right"
+      }
+    });
+  }
+</script>
+</body>
+
+</html>

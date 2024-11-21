@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -54,10 +55,10 @@ public class UserController {
 
     // 사용자 정보 업데이트
     @PostMapping("/update")
-    public String updateUserProfile(@ModelAttribute @Valid UserProfileUpdateRequest userDto, BindingResult result, Model model, Principal principal) {
+    public String updateUserProfile(@ModelAttribute @Valid UserProfileUpdateRequest userDto, BindingResult result, Model model, Principal principal, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("userDto", userDto);
-            return "user";
+            return "user"; // 유효성 검증 실패 시 다시 폼으로 돌아감
         }
 
         Optional<User> userOptional = userService.getUserByEmail(principal.getName());
@@ -84,15 +85,19 @@ public class UserController {
 
             // 이메일이 변경된 경우에만 로그인 페이지로 리다이렉트
             if (isEmailChanged) {
+                redirectAttributes.addFlashAttribute("successMessage", "Email updated successfully. Please log in again.");
                 return "redirect:/login?emailUpdated=true";
             }
 
-            // 이메일이 변경되지 않은 경우, 프로필 페이지로 리다이렉트
+            // 이메일이 변경되지 않은 경우 성공 메시지와 함께 프로필 페이지로 리다이렉트
+            redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully.");
             return "redirect:/view/user";
         } else {
-            return "view/error/error";
+            redirectAttributes.addFlashAttribute("errorMessage", "User not found.");
+            return "redirect:/view/error/error";
         }
     }
+
 
     // 사용자 프로필 조회 (로그인된 사용자)
     @GetMapping("/view/user")
