@@ -10,9 +10,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+
 
     // 기존 메서드
     @Query("SELECT DISTINCT p FROM Project p LEFT JOIN p.projectMembers pm WHERE p.teamLeader = :user OR pm.user = :user")
@@ -28,6 +30,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     // 프로젝트 ID 목록에 포함되지 않은 프로젝트를 페이징 처리하여 반환
     Page<Project> findByProjectIdNotIn(List<Long> projectIds, Pageable pageable);
+
+    Optional<Project> findByProjectName(String projectName);
 
 }
 

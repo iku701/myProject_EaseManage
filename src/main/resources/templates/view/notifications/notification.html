@@ -166,7 +166,7 @@
       </div>
       <!-- Custom board area for project-related posts -->
       <div class="row">
-        <!-- Announcements Section -->
+        <!-- 공고 리스트 -->
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
@@ -175,30 +175,20 @@
             </div>
             <div class="card-body">
               <!-- Announcement Items -->
-              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                <h6><b>Posted by: Team Leader</b></h6>
-                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">Backend Developer Needed for Project X</a></h6>
-                <p>Our current project requires an additional backend developer with experience in Java/Spring Boot. Interested members, please DM for more details.</p>
-              </div>
-              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                <h6><b>Posted by: Project Manager</b></h6>
-                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">Looking for a UI/UX Designer</a></h6>
-                <p>We need a skilled UI/UX designer to help enhance the project's interface. Please reach out if you're interested in collaborating.</p>
-              </div>
-              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                <h6><b>Posted by: Team Alpha</b></h6>
-                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">Seeking QA Testers for Final Phase</a></h6>
-                <p>As we approach the final stage of our project, we are looking for QA testers. If you have experience in test case development, please contact us.</p>
-              </div>
-              <div class="announcement" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                <h6><b>Posted by: 김영수</b></h6>
-                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">프로젝트 Y를 위한 프론트엔드 개발자 모집</a></h6>
-                <p>React 또는 Vue.js 경험이 있는 프론트엔드 개발자를 찾고 있습니다. 관심 있는 분은 메시지 주세요.</p>
-              </div>
-              <div class="announcement">
-                <h6><b>Posted by: 박미진</b></h6>
-                <h6><b>Title:</b> <a href="announcementForm.html" target="_blank">데이터 분석 지원자 모집 공고</a></h6>
-                <p>프로젝트의 데이터 분석을 위해 Python과 Pandas 사용 가능자를 모집 중입니다. 참여 의향이 있는 분은 DM으로 연락해 주세요.</p>
+              <div th:each="announcement : ${announcements}" class="announcement"
+                   style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
+                <h6><b>Posted by:</b> <span th:text="${announcement.postedBy}">Team Leader</span></h6>
+                <h6>
+                  <b>Title:</b>
+                  <a th:href="@{/announcementForm/{id}(id=${announcement.id})}" target="_blank"
+                     th:text="${announcement.title}">Announcement Title</a>
+                </h6>
+                <h6>
+                  <b>Project Name:</b>
+                  <a th:href="@{/otherProjectForm/{id}(id=${announcement.project.projectId})}" target="_blank"
+                     th:text="${announcement.project.projectName}">Project Name</a>
+                </h6>
+                <p th:text="${announcement.content}">Announcement Content</p>
               </div>
             </div>
           </div>
@@ -242,7 +232,7 @@
         </div>
       </div>
       <div class="row">
-        <!-- Announcements Form -->
+        <!-- 공고 작성 폼 -->
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
@@ -253,18 +243,25 @@
               <form th:action="@{/postAnnouncement}" method="post">
                 <div class="form-group">
                   <label for="announcementTitle">Title</label>
-                  <input type="text" class="form-control" id="announcementTitle" name="title" placeholder="Enter announcement title" required>
+                  <input type="text" class="form-control" id="announcementTitle" name="title"
+                         placeholder="Enter announcement title" required>
                 </div>
                 <div class="form-group">
                   <label for="announcementContent">Content</label>
-                  <textarea class="form-control" id="announcementContent" name="content" rows="4" placeholder="Enter announcement content" required></textarea>
+                  <textarea class="form-control" id="announcementContent" name="content" rows="4"
+                            placeholder="Enter announcement content" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="announcementProjectName">Project Name</label>
+                  <input type="text" class="form-control" id="announcementProjectName" name="projectName"
+                         placeholder="Enter project name" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Post Announcement</button>
               </form>
             </div>
           </div>
         </div>
-        <!-- 자유게시판 Form -->
+        <!-- 자유게시판 작성 -->
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">

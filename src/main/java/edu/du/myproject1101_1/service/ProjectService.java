@@ -40,6 +40,10 @@ public class ProjectService {
         return projectRepository.findById(id);
     }
 
+    public Optional<Project> findByName(String projectName) {
+        return projectRepository.findByProjectName(projectName);
+    }
+
     public void deleteProjectById(Long id) {
         projectRepository.deleteById(id);
     }
