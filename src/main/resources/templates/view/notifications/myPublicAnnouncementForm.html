@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>
+        Ease Management
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+          name='viewport'/>
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="wrapper">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+        <div class="logo">
+            <a class="simple-text logo-mini">
+                <div class="logo-image-small">
+                    <img th:src="@{/assets/img/apple-icon.png}">
+                </div>
+            </a>
+            <a class="simple-text logo-normal">
+                Ease Management
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li>
+                    <a th:href="@{/myProject}">
+                        <i class="nc-icon nc-paper"></i>
+                        <p>My Project</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{dashboard}">
+                        <i class="nc-icon nc-bank"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/view/otherProjects}">
+                        <i class="nc-icon nc-bullet-list-67"></i>
+                        <p>Other Project</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a th:href="@{/view/notifications}">
+                        <i class="nc-icon nc-bell-55"></i>
+                        <p>Notification</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/view/user}">
+                        <i class="nc-icon nc-single-02"></i>
+                        <p th:text="${username}"></p>
+                    </a>
+                </li>
+                <li class="active-pro">
+                    <a th:href="@{/view/upgrade}">
+                        <i class="nc-icon nc-spaceship"></i>
+                        <p>Upgrade to PRO</p>
+                    </a>
+                </li>
+                <!-- 로그아웃 -->
+                <li class="logout">
+                    <a th:href="@{/logout}">
+                        <i class="nc-icon nc-button-power"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <a class="navbar-brand" href="javascript:;">Notification</a>
+                </div>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <form class="form-inline" style="margin-right: 20px; flex: 1;">
+                        <div class="input-group no-border" style="width: 100%; max-width: 500px;">
+                            <input type="text" class="form-control" placeholder="Search..." style="width: 100%;">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <i class="nc-icon nc-zoom-split"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="navbar-nav">
+                        <li class="nav-item" style="margin-right: 15px;">
+                            <a class="nav-link btn-magnify" href="javascript:;">
+                                <i class="nc-icon nc-layout-11"></i>
+                                <span class="d-lg-none d-md-block">Stats</span>
+                            </a>
+                        </li>
+                        <li class="nav-item btn-rotate dropdown" style="margin-right: 15px;">
+                            <a class="nav-link dropdown-toggle" href="javascript:;" id="navbarDropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="nc-icon nc-bell-55"></i>
+                                <span class="d-lg-none d-md-block">Notifications</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-rotate" href="javascript:;">
+                                <i class="nc-icon nc-settings-gear-65"></i>
+                                <span class="d-lg-none d-md-block">Account</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Public Announcement Details</h5>
+                            <p class="card-category">View or update the details of the announcement</p>
+                        </div>
+                        <div class="card-body">
+                            <!-- 공지사항 상세보기 -->
+                            <div>
+                                <h6><b>Posted by:</b> <span th:text="${announcement.postedBy.username}"></span></h6>
+                                <h6><b>Title:</b> <span th:text="${announcement.title}"></span></h6>
+                                <h6><b>Project Name:</b> <span th:text="${announcement.project.projectName}"></span></h6>
+                                <p><b>Content:</b></p>
+                                <p th:text="${announcement.content}"></p>
+                                <p><small><b>Created At:</b> <span th:text="${announcement.createdAt}"></span></small></p>
+                                <p><small><b>Updated At:</b> <span th:text="${announcement.updatedAt}"></span></small></p>
+                            </div>
+                            <div class="mt-4">
+                                <form th:action="@{/updatePublicAnnouncement}" method="post">
+                                    <input type="hidden" name="id" th:value="${announcement.id}">
+
+                                    <div class="form-group">
+                                        <label for="announcementTitle">Title</label>
+                                        <input type="text" class="form-control" id="announcementTitle" name="title"
+                                               th:value="${announcement.title}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="announcementContent">Content</label>
+                                        <textarea class="form-control" id="announcementContent" name="content" rows="4" required
+                                                  th:text="${announcement.content}"></textarea>
+                                    </div>
+
+                                    <!-- Update and Delete buttons -->
+                                    <div style="display: flex; gap: 10px;">
+                                        <button type="submit" class="btn btn-warning">Update</button>
+                                        <form th:action="@{/deletePublicAnnouncement}" method="post">
+                                            <input type="hidden" name="id" th:value="${announcement.id}">
+                                            <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this announcement?')">Delete</button>
+                                        </form>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-secondary" onclick="history.back()">Back to Notifications</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer footer-black  footer-white">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>, made with <i class="fa fa-heart heart"></i> by E.M
+              </span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- Core JS Files -->
+    <script th:src="@{/assets/js/core/jquery.min.js}"></script>
+    <script th:src="@{/assets/js/core/popper.min.js}"></script>
+    <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+    <!-- Include Perfect Scrollbar before paper-dashboard -->
+    <script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
+    <!-- Chart JS -->
+    <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
+    <!-- Main Dashboard Script -->
+    <script th:src="@{/assets/js/paper-dashboard.js}"></script>
+    <script>
+        // Example of showing a notification
+        function showCustomNotification(message, type) {
+            $.notify({
+                icon: "nc-icon nc-bell-55",
+                message: message
+            }, {
+                type: type,
+                timer: 3000,
+                placement: {
+                    from: "top",
+                    align: "right"
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

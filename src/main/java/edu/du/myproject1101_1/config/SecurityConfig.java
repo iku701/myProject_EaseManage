@@ -23,8 +23,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/assets/**", "/js/**", "/images/**").permitAll() // 로그인, 회원가입,
-                // 정적 자원 허용
+                .antMatchers("/login", "/register", "/notifications", "/assets/**", "/js/**", "/images/**").permitAll() // 로그인, 회원가입,
+                // 정적 자원, 알림 페이지 허용
+                .antMatchers("/postAnnouncement").hasRole("USER") // 공고 작성은 USER 역할 필요
                 .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
                 .and()
                 .formLogin()

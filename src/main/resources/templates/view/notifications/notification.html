@@ -18,9 +18,9 @@
   <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet"/>
   <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
   <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
-  <link th:href="@{/assets/css/pagination.css}" rel="stylesheet"/>
+  <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
 </head>
-<body class="">
+<body>
 <div class="wrapper">
   <div class="sidebar" data-color="white" data-active-color="danger">
     <div class="logo">
@@ -164,36 +164,65 @@
           </div>
         </div>
       </div>
-      <!-- Custom board area for project-related posts -->
+      <!-- Custom board area for project-related posts =page-link custom-page-link=  -->
       <div class="row">
-        <!-- 공고 리스트 -->
+        <!-- 좌측: 공고 리스트 -->
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h5 class="card-title">Public Announcement</h5>
+              <h5 class="card-title">Public Announcements</h5>
               <p class="card-category">Stay updated with important project announcements</p>
             </div>
             <div class="card-body">
-              <!-- Announcement Items -->
-              <div th:each="announcement : ${announcements}" class="announcement"
-                   style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">
-                <h6><b>Posted by:</b> <span th:text="${announcement.postedBy}">Team Leader</span></h6>
-                <h6>
-                  <b>Title:</b>
-                  <a th:href="@{/announcementForm/{id}(id=${announcement.id})}" target="_blank"
-                     th:text="${announcement.title}">Announcement Title</a>
-                </h6>
-                <h6>
-                  <b>Project Name:</b>
-                  <a th:href="@{/otherProjectForm/{id}(id=${announcement.project.projectId})}" target="_blank"
-                     th:text="${announcement.project.projectName}">Project Name</a>
-                </h6>
-                <p th:text="${announcement.content}">Announcement Content</p>
-              </div>
+              <ul class="list-group">
+                <li th:each="announcement : ${announcements}" class="list-group-item">
+                  <a th:href="@{/view/notifications/myPublicAnnouncementForm/{id}(id=${announcement.id})}"
+                     style="text-decoration: none; color: inherit;">
+                    <div>
+                      <h6><b>Posted by:</b> <span th:text="${announcement.postedBy.username}"></span></h6>
+                      <h6><b>Title:</b> <span th:text="${announcement.title}"></span></h6>
+                      <h6>
+                        <b>Project Name:</b> <span th:text="${announcement.project.projectName}"></span>
+                        <small style="float: right;">
+                          Created At : <span th:text="${announcement.createdAt}"></span>
+                        </small>
+                      </h6>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="text-center mt-4">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPublicAnnouncementModal">
+                Add Public Announcement
+              </button>
             </div>
           </div>
+          <div class="pagination-container">
+            <nav aria-label="Page navigation">
+              <ul class="pagination justify-content-center">
+                <!-- Previous Button -->
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                  <a class="page-link custom-page-link" th:href="@{/view/notifications(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <!-- Page Numbers -->
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i} ? 'active'">
+                  <a class="page-link custom-page-link" th:href="@{/view/notifications(page=${i}, size=${pageSize})}" th:text="${i + 1}">1</a>
+                </li>
+                <!-- Next Button -->
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                  <a class="page-link custom-page-link" th:href="@{/view/notifications(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
-        <!-- 자유게시판 Section -->
+
+        <!-- 우측: 자유 게시판 -->
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
@@ -231,60 +260,55 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <!-- 공고 작성 폼 -->
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title">New Public Announcement</h5>
-              <p class="card-category">Post a new announcement to share with your project team</p>
-            </div>
-            <div class="card-body">
-              <form th:action="@{/postAnnouncement}" method="post">
-                <div class="form-group">
-                  <label for="announcementTitle">Title</label>
-                  <input type="text" class="form-control" id="announcementTitle" name="title"
-                         placeholder="Enter announcement title" required>
-                </div>
-                <div class="form-group">
-                  <label for="announcementContent">Content</label>
-                  <textarea class="form-control" id="announcementContent" name="content" rows="4"
-                            placeholder="Enter announcement content" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="announcementProjectName">Project Name</label>
-                  <input type="text" class="form-control" id="announcementProjectName" name="projectName"
-                         placeholder="Enter project name" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Post Announcement</button>
-              </form>
-            </div>
+
+    </div>
+    <script>
+      // 페이지를 떠날 때 스크롤 위치 저장
+      window.onbeforeunload = function () {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+      };
+
+      // 페이지가 로드되면 저장된 위치로 이동
+      window.onload = function () {
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+          window.scrollTo(0, scrollPosition);
+        }
+      };
+    </script>
+    <!-- 공고 작성 모달 -->
+    <div class="modal fade" id="addPublicAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="addPublicAnnouncementModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addPublicAnnouncementModalLabel">Add New Announcement</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-        </div>
-        <!-- 자유게시판 작성 -->
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title">New Community Post</h5>
-              <p class="card-category">Share your thoughts with the community</p>
-            </div>
-            <div class="card-body">
-              <form th:action="@{/postCommunityPost}" method="post">
-                <div class="form-group">
-                  <label for="postTitle">Title</label>
-                  <input type="text" class="form-control" id="postTitle" name="title" placeholder="Enter post title" required>
-                </div>
-                <div class="form-group">
-                  <label for="postContent">Content</label>
-                  <textarea class="form-control" id="postContent" name="content" rows="4" placeholder="Enter post content" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-success btn-block">Post to Community</button>
-              </form>
-            </div>
+          <div class="modal-body">
+            <form th:action="@{/addPublicAnnouncement}" method="post">
+              <div class="form-group">
+                <label for="announcementTitle">Title</label>
+                <input type="text" class="form-control" id="announcementTitle" name="title" required>
+              </div>
+              <div class="form-group">
+                <label for="announcementContent">Content</label>
+                <textarea class="form-control" id="announcementContent" name="content" rows="4" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="projectId">Select Project</label>
+                <select class="form-control" id="projectId" name="projectId" required>
+                  <option th:each="project : ${projects}" th:value="${project.projectId}" th:text="${project.projectName}">Project Name</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Post Announcement</button>
+            </form>
           </div>
         </div>
       </div>
-  </div>
+    </div>
+
     <footer class="footer footer-black  footer-white">
       <div class="container-fluid">
         <div class="row">
