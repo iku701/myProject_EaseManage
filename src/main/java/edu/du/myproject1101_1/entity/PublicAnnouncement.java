@@ -45,4 +45,29 @@ public class PublicAnnouncement {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+
+
+    @Transient
+    private String formattedCreatedAt; // 데이터베이스에 저장되지 않음
+
+    public String getFormattedCreatedAt() {
+        return formattedCreatedAt;
+    }
+
+    public void setFormattedCreatedAt(String formattedCreatedAt) {
+        this.formattedCreatedAt = formattedCreatedAt;
+    }
+
+    @Transient
+    private String formattedUpdatedAt;
+
+    public String getFormattedUpdatedAt() {
+        return formattedUpdatedAt;
+    }
+
+    public void setFormattedUpdatedAt(String formattedUpdatedAt) {
+        this.formattedUpdatedAt = formattedUpdatedAt;
+    }
+
 }

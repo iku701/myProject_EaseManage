@@ -1,0 +1,32 @@
+.sidebar-wrapper {
+    overflow-x: hidden; /* 좌우 스크롤 숨김 */
+    white-space: nowrap; /* 텍스트가 넘칠 경우 줄바꿈 금지 */
+    max-width: 250px; /* 사이드바 최대 너비 설정 */
+    box-sizing: border-box; /* 패딩과 보더를 너비에 포함 */
+}
+
+.sidebar-wrapper .nav a {
+    display: flex; /* 아이콘과 텍스트를 한 줄에 표시 */
+    align-items: center; /* 아이콘과 텍스트 수직 정렬 */
+    text-overflow: ellipsis; /* 텍스트 넘칠 경우 생략 표시 */
+    overflow: hidden; /* 넘치는 내용 숨김 */
+}
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 800;
+    background-color: rgba(224, 223, 218, 0.7); /* 약간의 투명도 */
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 상단 그림자 효과 */
+    backdrop-filter: blur(3px); /* 푸터 영역만 블러 효과 */
+    -webkit-backdrop-filter: blur(10px); /* Safari 호환성 */
+}
+
+body {
+    background: #f4f4f4; /* 본문 배경 설정 */
+    margin-bottom: 50px; /* 푸터 높이만큼 아래 여백 추가 */
+}
+

@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
     <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>
         Ease Management
     </title>
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+          name='viewport'/>
     <!-- Fonts and icons -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <!-- CSS Files -->
-    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet" />
-    <link th:href="@{/assets/css/login.css}" rel="stylesheet" />
-    <link th:href="@{/assets/demo/demo.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/sidebar.css}" rel="stylesheet"/>
     <style>
-        body, .wrapper {
-            background-color: #f4f3ef;
+        /* 버튼 크기 통일 */
+        .btn-uniform {
+            padding: 10px 20px; /* 내부 여백 */
+            height: auto;      /* 높이를 내용에 맞춤 */
+            font-size: 13px;   /* 글자 크기 통일 */
+            line-height: 1.5;  /* 텍스트 정렬 */
         }
-        .sidebar {
-            width: 260px; /* 사이드바의 너비 */
-            position: fixed;
-            height: 100%;
-            left: 0;
-            top: 0;
-            z-index: 1000; /* 다른 요소 위에 표시 */
+        /* 부모 컨테이너의 중앙 정렬 */
+        .d-flex {
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center;     /* 세로 중앙 정렬 */
         }
-        .main-panel {
-            margin-left: 1620px; /* 사이드바의 너비와 일치하게 설정 */
-            position: relative;
-            min-height: 100vh;
-            width: calc(100% - 260px); /* 전체 너비에서 사이드바 너비만큼 뺌 */
+        .custom-update-btn {
+            background-color: #51cbce; /* 버튼 배경색 */
+            border-color: #51cbce;    /* 버튼 테두리색 */
+            color: #ffffff;          /* 텍스트 색상 (흰색) */
         }
-        .input-group.no-border {
-            margin: 0 auto; /* 가운데 정렬 */
-            max-width: 500px; /* 최대 너비 설정 */
-            width: 100%; /* 부모 요소에 맞춰 전체 너비 사용 */
+        .custom-update-btn:hover {
+            background-color: #3aa7aa; /* 호버 시 조금 더 어두운 색상 */
+            border-color: #3aa7aa;
+        }
+        .custom-update-btn:focus {
+            outline: none; /* 포커스 시 기본 외곽선 제거 */
+            box-shadow: 0 0 0 0.2rem rgba(81, 203, 206, 0.5); /* 포커스 시 강조 */
         }
     </style>
 </head>
@@ -49,7 +54,7 @@
         <div class="logo">
             <a class="simple-text logo-mini">
                 <div class="logo-image-small">
-                    <img th:src="@{/assets/img/logo-small.png}">
+                    <img th:src="@{/assets/img/apple-icon.png}">
                 </div>
             </a>
             <a class="simple-text logo-normal">
@@ -58,7 +63,7 @@
         </div>
         <div class="sidebar-wrapper">
             <ul class="nav">
-                <li class="active">
+                <li>
                     <a th:href="@{/myProject}">
                         <i class="nc-icon nc-paper"></i>
                         <p>My Project</p>
@@ -76,7 +81,7 @@
                         <p>Other Project</p>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a th:href="@{/view/notifications}">
                         <i class="nc-icon nc-bell-55"></i>
                         <p>Notification</p>
@@ -94,6 +99,7 @@
                         <p>Upgrade to PRO</p>
                     </a>
                 </li>
+                <!-- 로그아웃 -->
                 <li class="logout">
                     <a th:href="@{/logout}">
                         <i class="nc-icon nc-button-power"></i>
@@ -104,10 +110,11 @@
         </div>
     </div>
     <div class="main-panel">
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
-                    <a class="navbar-brand" href="javascript:;">Create Project</a>
+                    <a class="navbar-brand" href="javascript:;">Notification</a>
                 </div>
                 <div class="collapse navbar-collapse justify-content-end" id="navigation">
                     <form class="form-inline" style="margin-right: 20px; flex: 1;">
@@ -128,7 +135,8 @@
                             </a>
                         </li>
                         <li class="nav-item btn-rotate dropdown" style="margin-right: 15px;">
-                            <a class="nav-link dropdown-toggle" href="javascript:;" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="javascript:;" id="navbarDropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="nc-icon nc-bell-55"></i>
                                 <span class="d-lg-none d-md-block">Notifications</span>
                             </a>
@@ -147,79 +155,76 @@
                     </ul>
                 </div>
             </div>
-
         </nav>
-        <div class="container mt-5">
+        <!-- End Navbar -->
+        <div class="content">
             <div class="row">
-                <div class="col-md-8 offset-md-2" style="margin-top: 45px;">
+                <div class="col-md-8 offset-md-2">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Create New Project</h5>
-                            <p class="card-category">Enter the details below</p>
+                            <h5 class="card-title">Public Announcement Details</h5>
+                            <p class="card-category">View or update the details of the announcement</p>
                         </div>
                         <div class="card-body">
-                            <form action="/createProject" method="post">
-                                <div class="form-group">
-                                    <label for="projectName">Project Name</label>
-                                    <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Enter project name" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="projectDescription">Project Description</label>
-                                    <textarea class="form-control" id="projectDescription" name="projectDescription" rows="3" placeholder="Enter project description" required></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="username">Team Leader (disabled)</label>
-                                    <input type="text" class="form-control" id="username" th:value="${username}" disabled>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="projectStatus">Project Status</label>
-                                    <select class="form-control" id="projectStatus" name="projectStatus" required>
-                                        <option value="in-progress">In Progress</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="upcoming">Upcoming</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="startDate">Start Date</label>
-                                    <input type="date" class="form-control" id="startDate" name="startDate" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="endDate">End Date</label>
-                                    <input type="date" class="form-control" id="endDate" name="endDate" required>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary btn-block">Create Project</button>
-                            </form>
+                            <!-- 공지사항 상세보기 -->
+                            <div>
+                                <h6><b>Project Name:</b> <span th:text="${announcement.project.projectName}"></span></h6>
+                                <h6><b>Title:</b> <span th:text="${announcement.title}"></span></h6>
+                                <h6><b>Posted by:</b> <span th:text="${announcement.postedBy.username}"></span></h6>
+                                <p><b>Content:</b></p>
+                                <p th:text="${announcement.content}"></p>
+                                <p><small><b>Created At:</b> <span th:text="${announcement.formattedCreatedAt}"></span></small></p>
+                                <p><small><b>Updated At:</b> <span th:text="${announcement.formattedUpdatedAt}"></span></small></p>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center mt-2" style="gap: 10px;">
+                                <!-- Back 버튼 -->
+                                <button class="btn btn-secondary btn-uniform" onclick="history.back()">Back to Notifications</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <footer class="footer footer-black footer-white fixed-footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="credits ml-auto">
+        <footer class="footer footer-black footer-white fixed-footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="credits ml-auto">
                         <span class="copyright">
                           © <script>
                             document.write(new Date().getFullYear())
                           </script>, made with <i class="fa fa-heart heart"></i> by E.M
                         </span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
-</div>
-<!-- Core JS Files -->
-<script th:src="@{/assets/js/core/jquery.min.js}"></script>
-<script th:src="@{/assets/js/core/popper.min.js}"></script>
-<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
-<script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
-<script th:src="@{/assets/js/paper-dashboard.js}" type="text/javascript"></script>
+        </footer>
+    </div>
+    <!-- Core JS Files -->
+    <script th:src="@{/assets/js/core/jquery.min.js}"></script>
+    <script th:src="@{/assets/js/core/popper.min.js}"></script>
+    <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+    <!-- Include Perfect Scrollbar before paper-dashboard -->
+    <script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
+    <!-- Chart JS -->
+    <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
+    <!-- Main Dashboard Script -->
+    <script th:src="@{/assets/js/paper-dashboard.js}"></script>
+    <script>
+        // Example of showing a notification
+        function showCustomNotification(message, type) {
+            $.notify({
+                icon: "nc-icon nc-bell-55",
+                message: message
+            }, {
+                type: type,
+                timer: 3000,
+                placement: {
+                    from: "top",
+                    align: "right"
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>

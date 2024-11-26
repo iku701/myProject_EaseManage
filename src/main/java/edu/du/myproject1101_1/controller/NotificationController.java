@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -51,8 +52,15 @@ public class NotificationController {
         List<Project> projects = projectService.getProjectsByUser(currentUser);
         model.addAttribute("projects", projects);
 
-        // 공고 목록 페이징
         Page<PublicAnnouncement> announcements = announcementService.getPagedAnnouncements(PageRequest.of(page, size));
+
+        // 날짜 포맷팅
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        announcements.getContent().forEach(announcement -> {
+            announcement.setFormattedCreatedAt(announcement.getCreatedAt().format(formatter));
+        });
+
+        // 공고 목록 페이징
         model.addAttribute("announcements", announcements.getContent());
         model.addAttribute("currentPage", announcements.getNumber());
         model.addAttribute("totalPages", announcements.getTotalPages());
@@ -62,9 +70,6 @@ public class NotificationController {
 
         return "view/notifications/notification";
     }
-
-
-
 
     @PostMapping("/addPublicAnnouncement")
     public String addAnnouncement(@RequestParam String title,
@@ -91,10 +96,17 @@ public class NotificationController {
 
         // 공지사항 가져오기
         PublicAnnouncement announcement = announcementService.getAnnouncementById(id);
-        model.addAttribute("announcement", announcement);
 
-        // 사이드바에 사용자 이름 추가
-        model.addAttribute("username", currentUser.getUsername());
+        // 날짜 포맷 적용
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedCreatedAt = announcement.getCreatedAt().format(formatter);
+        String formattedUpdatedAt = announcement.getUpdatedAt().format(formatter);
+        announcement.setFormattedCreatedAt(formattedCreatedAt);
+        announcement.setFormattedUpdatedAt(formattedUpdatedAt);
+
+        // 모델에 데이터 추가
+        model.addAttribute("announcement", announcement);
+        model.addAttribute("username", currentUser.getUsername()); // 사이드바에 사용자 이름 추가
 
         return "view/notifications/myPublicAnnouncementForm";
     }
