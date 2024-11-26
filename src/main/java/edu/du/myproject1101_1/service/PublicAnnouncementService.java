@@ -61,7 +61,7 @@ public class PublicAnnouncementService {
     // 공지사항 ID로 가져오기
     public PublicAnnouncement getAnnouncementById(Long id) {
         return announcementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Announcement not found with ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Public Announcement not found with ID: " + id));
     }
 
     // 공지사항 업데이트
@@ -80,4 +80,6 @@ public class PublicAnnouncementService {
         PublicAnnouncement announcement = getAnnouncementById(id);
         announcementRepository.delete(announcement);
     }
+
+
 }

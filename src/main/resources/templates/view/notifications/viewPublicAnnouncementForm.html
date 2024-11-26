@@ -20,6 +20,7 @@
     <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/sidebar.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/myPublicAnnouncementFrom_Button/button_update_delete.css}" rel="stylesheet"/>
     <style>
         /* 버튼 크기 통일 */
         .btn-uniform {
@@ -155,22 +156,21 @@
                     </ul>
                 </div>
             </div>
-        </nav>
-        <!-- End Navbar -->
+        </nav>        <!-- End Navbar -->
         <div class="content">
             <div class="row">
                 <div class="col-md-8 offset-md-2">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Public Announcement Details</h5>
-                            <p class="card-category">View or update the details of the announcement</p>
+                            <h3 class="card-title">PROJECT.
+                                <span th:text="${announcement.project.projectName}"></span></h3><br>
+                            <p class="card-category">       </p>
                         </div>
                         <div class="card-body">
                             <!-- 공지사항 상세보기 -->
                             <div>
-                                <h6><b>Project Name:</b> <span th:text="${announcement.project.projectName}"></span></h6>
-                                <h6><b>Title:</b> <span th:text="${announcement.title}"></span></h6>
-                                <h6><b>Posted by:</b> <span th:text="${announcement.postedBy.username}"></span></h6>
+                                <h6><b>Title:</b> <span th:text="${announcement.title}"></span></h6><br>
+                                <h6><b>Posted by:</b> <span th:text="${announcement.postedBy.username}"></span></h6><br>
                                 <p><b>Content:</b></p>
                                 <p th:text="${announcement.content}"></p>
                                 <p><small><b>Created At:</b> <span th:text="${announcement.formattedCreatedAt}"></span></small></p>
@@ -180,6 +180,67 @@
                                 <!-- Back 버튼 -->
                                 <button class="btn btn-secondary btn-uniform" onclick="history.back()">Back to Notifications</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Comments</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- 댓글 리스트 -->
+                            <ul class="list-group">
+                                <li th:each="comment : ${comments}" class="list-group-item">
+                                    <div>
+                                        <!-- 댓글 내용 -->
+                                        <p><b th:text="${comment.user.username}"></b></p>
+                                        <p><span th:text="${comment.content}"></span></p>
+                                        <small>
+                                            Posted at: <span th:text="${comment.formattedCreatedAt}"></span>
+                                        </small>
+                                    </div>
+                                    <!-- 대댓글 버튼 -->
+                                    <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
+                                            th:attr="data-target='#replyForm${comment.id}'">
+                                        Reply
+                                    </button>
+                                    <!-- 대댓글 폼 -->
+                                    <div class="collapse mt-2" th:id="'replyForm' + ${comment.id}">
+                                        <form th:action="@{/addComment}" method="post">
+                                            <input type="hidden" name="parentCommentId" th:value="${comment.id}">
+                                            <input type="hidden" name="referenceId" th:value="${announcement.id}">
+                                            <input type="hidden" name="commentType" value="PUBLIC_ANNOUNCEMENT">
+                                            <div class="form-group">
+                                                <textarea class="form-control" name="content" placeholder="Write a reply..." rows="2" required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-sm btn-primary">Reply</button>
+                                        </form>
+                                    </div>
+                                    <!-- 대댓글 리스트 -->
+                                    <ul class="list-group mt-2" th:if="${comment.replies}">
+                                        <li th:each="reply : ${comment.replies}" class="list-group-item ml-4">
+                                            <div>
+                                                <p><b th:text="${reply.user.username}"></b>: <span th:text="${reply.content}"></span></p>
+                                                <small>
+                                                    Posted at: <span th:text="${reply.formattedCreatedAt}"></span>
+                                                </small>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <!-- 새 댓글 작성 -->
+                            <form th:action="@{/addComment}" method="post" class="mt-4">
+                                <input type="hidden" name="referenceId" th:value="${announcement.id}">
+                                <input type="hidden" name="commentType" value="PUBLIC_ANNOUNCEMENT">
+                                <div class="form-group">
+                                    <textarea class="form-control" name="content" placeholder="Write a comment..." rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -209,6 +270,7 @@
     <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
     <!-- Main Dashboard Script -->
     <script th:src="@{/assets/js/paper-dashboard.js}"></script>
+
     <script>
         // Example of showing a notification
         function showCustomNotification(message, type) {
