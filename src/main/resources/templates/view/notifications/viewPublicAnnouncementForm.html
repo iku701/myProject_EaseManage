@@ -232,6 +232,8 @@
                                     </ul>
                                 </li>
                             </ul>
+
+
                             <!-- 새 댓글 작성 -->
                             <form th:action="@{/addComment}" method="post" class="mt-4">
                                 <input type="hidden" name="referenceId" th:value="${announcement.id}">
@@ -287,6 +289,7 @@
             });
         }
     </script>
+</div>
 </body>
 
 </html>
