@@ -122,6 +122,7 @@ public class NotificationController {
 
         // 본인이 작성한 공고문인지 확인
         boolean isOwner = announcement.getPostedBy().getId().equals(currentUser.getId());
+        model.addAttribute("isOwner", isOwner);
 
         // 공고문 날짜 포맷 적용
         announcement.setFormattedCreatedAt(formatter.format(announcement.getCreatedAt()));
@@ -135,6 +136,23 @@ public class NotificationController {
 
         // 본인이 작성한 공고문인지에 따라 다른 템플릿 반환
         return isOwner ? "view/notifications/myPublicAnnouncementForm" : "view/notifications/viewPublicAnnouncementForm";
+    }
+
+    @PostMapping("/updatePublicAnnouncement")
+    public String updateAnnouncement(@RequestParam Long id,
+                                     @RequestParam String title,
+                                     @RequestParam String content,
+                                     Principal principal) {
+        User currentUser = userService.getUserByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
+        announcementService.updateAnnouncement(id, title, content, currentUser);
+        return "redirect:/view/notifications";
+    }
+
+    @PostMapping("/deletePublicAnnouncement")
+    public String deleteAnnouncement(@RequestParam Long id) {
+        announcementService.deleteAnnouncement(id);
+        return "redirect:/view/notifications";
     }
 
     @PostMapping("/addComment")
@@ -160,21 +178,21 @@ public class NotificationController {
         }
     }
 
-
-    @PostMapping("/updatePublicAnnouncement")
-    public String updateAnnouncement(@RequestParam Long id,
-                                     @RequestParam String title,
-                                     @RequestParam String content,
-                                     Principal principal) {
-        User currentUser = userService.getUserByEmail(principal.getName())
+    @PostMapping("/updateComment")
+    public String updateComment(@RequestParam Long commentId,
+                                @RequestParam String content,
+                                @RequestParam Long referenceId,
+                                Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
-        announcementService.updateAnnouncement(id, title, content, currentUser);
-        return "redirect:/view/notifications";
+
+        // 댓글 업데이트
+        commentService.updateComment(commentId, content, currentUser);
+
+        // 리다이렉트 URL 결정
+        return "redirect:/view/notifications/myPublicAnnouncementForm/" + referenceId;
     }
 
-    @PostMapping("/deletePublicAnnouncement")
-    public String deleteAnnouncement(@RequestParam Long id) {
-        announcementService.deleteAnnouncement(id);
-        return "redirect:/view/notifications";
-    }
+
+
 }
