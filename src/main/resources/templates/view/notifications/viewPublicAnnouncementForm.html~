@@ -21,6 +21,33 @@
     <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/sidebar.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/myPublicAnnouncementFrom_Button/button_update_delete.css}" rel="stylesheet"/>
+    <style>
+        /* 버튼 크기 통일 */
+        .btn-uniform {
+            padding: 10px 20px; /* 내부 여백 */
+            height: auto;      /* 높이를 내용에 맞춤 */
+            font-size: 13px;   /* 글자 크기 통일 */
+            line-height: 1.5;  /* 텍스트 정렬 */
+        }
+        /* 부모 컨테이너의 중앙 정렬 */
+        .d-flex {
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center;     /* 세로 중앙 정렬 */
+        }
+        .custom-update-btn {
+            background-color: #51cbce; /* 버튼 배경색 */
+            border-color: #51cbce;    /* 버튼 테두리색 */
+            color: #ffffff;          /* 텍스트 색상 (흰색) */
+        }
+        .custom-update-btn:hover {
+            background-color: #3aa7aa; /* 호버 시 조금 더 어두운 색상 */
+            border-color: #3aa7aa;
+        }
+        .custom-update-btn:focus {
+            outline: none; /* 포커스 시 기본 외곽선 제거 */
+            box-shadow: 0 0 0 0.2rem rgba(81, 203, 206, 0.5); /* 포커스 시 강조 */
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -129,8 +156,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
-            <!-- End Navbar -->
+        </nav>        <!-- End Navbar -->
         <div class="content">
             <div class="row">
                 <div class="col-md-8 offset-md-2">
@@ -150,58 +176,11 @@
                                 <p><small><b>Created At:</b> <span th:text="${announcement.formattedCreatedAt}"></span></small></p>
                                 <p><small><b>Updated At:</b> <span th:text="${announcement.formattedUpdatedAt}"></span></small></p>
                             </div>
-
-                            <!-- 수정 및 삭제 버튼 -->
-                            <form id="updateForm" th:action="@{/updatePublicAnnouncement}" method="post">
-                                <input type="hidden" name="id" th:value="${announcement.id}">
-                                <div class="form-group">
-                                    <label for="announcementTitle">Title</label>
-                                    <input type="text" class="form-control" id="announcementTitle" name="title"
-                                           th:value="${announcement.title}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="announcementContent">Content</label>
-                                    <textarea
-                                            class="form-control"
-                                            id="announcementContent"
-                                            name="content"
-                                            required
-                                            th:text="${announcement.content}"
-                                            style="height: 300px; resize: none;"></textarea>
-                                </div>
-                            </form>
-                            <!-- 버튼 영역 -->
                             <div class="d-flex justify-content-center align-items-center mt-2" style="gap: 10px;">
-                                <!-- Update 버튼 -->
-                                <button
-                                        type="submit"
-                                        form="updateForm"
-                                        class="btn btn-primary"
-                                        onclick="return confirmUpdate();">Update
-                                </button>
-
-                                <!-- Delete 버튼 -->
-                                <form th:action="@{/deletePublicAnnouncement}" method="post" style="margin: 0;">
-                                    <input type="hidden" name="id" th:value="${announcement.id}">
-                                    <button
-                                            type="submit"
-                                            class="btn btn-danger btn-uniform"
-                                            onclick="return confirm('Are you sure you want to delete this announcement?')">Delete
-                                    </button>
-                                </form>
-
                                 <!-- Back 버튼 -->
                                 <button class="btn btn-secondary btn-uniform" onclick="history.back()">Back to Notifications</button>
                             </div>
-                            <script>
-                                // Update 버튼 클릭 시 확인 창 표시
-                                function confirmUpdate() {
-                                    return confirm('Are you sure you want to update this announcement?');
-                                }
-                            </script>
-
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -236,10 +215,9 @@
                                             <div class="form-group">
                                                 <textarea class="form-control" name="content" placeholder="Write a comment..." rows="2" required></textarea>
                                             </div>
-                                            <button type="submit" class="btn btn-sm btn-primary">Reply</button>
+                                            <button type="submit" class="btn btn-sm btn-primary" style="background-color: #0c5460">Reply</button>
                                         </form>
                                     </div>
-
                                     <!-- 대댓글 리스트 -->
                                     <ul class="list-group mt-2" th:if="${comment.replies}">
                                         <li th:each="reply : ${comment.replies}" class="list-group-item ml-4">
@@ -254,6 +232,8 @@
                                     </ul>
                                 </li>
                             </ul>
+
+
                             <!-- 새 댓글 작성 -->
                             <form th:action="@{/addComment}" method="post" class="mt-4">
                                 <input type="hidden" name="referenceId" th:value="${announcement.id}">
@@ -267,8 +247,8 @@
                     </div>
                 </div>
             </div>
-
-            <footer class="footer footer-black footer-white fixed-footer">
+        </div>
+        <footer class="footer footer-black footer-white fixed-footer">
             <div class="container-fluid">
                 <div class="row">
                     <div class="credits ml-auto">
@@ -292,7 +272,24 @@
     <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
     <!-- Main Dashboard Script -->
     <script th:src="@{/assets/js/paper-dashboard.js}"></script>
-</div>
+
+    <script>
+        // Example of showing a notification
+        function showCustomNotification(message, type) {
+            $.notify({
+                icon: "nc-icon nc-bell-55",
+                message: message
+            }, {
+                type: type,
+                timer: 3000,
+                placement: {
+                    from: "top",
+                    align: "right"
+                }
+            });
+        }
+    </script>
 </div>
 </body>
+
 </html>

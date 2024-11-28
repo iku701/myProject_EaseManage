@@ -227,7 +227,6 @@
                                             th:attr="data-target='#replyForm' + ${comment.id}">
                                         Reply
                                     </button>
-                                    <!-- 대댓글 폼 -->
                                     <div class="collapse mt-2" th:id="'replyForm' + ${comment.id}">
                                         <form th:action="@{/addComment}" method="post">
                                             <input type="hidden" name="parentCommentId" th:value="${comment.id}">

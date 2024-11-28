@@ -149,7 +149,7 @@
                     <img class="avatar border-gray" th:src="@{/assets/img/faces/clem-onojeghuo-2.jpg}" alt="...">
                     <h5 class="title" th:text="${user.username}">Chet Faker</h5>
                   </a>
-                  <p class="description" th:text="'@' + ${user.email}">
+                  <p class="description" th:text="'@' + ${user.username}">
                     @chetfaker
                   </p>
                 </div>

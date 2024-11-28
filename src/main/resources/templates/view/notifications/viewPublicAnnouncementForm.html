@@ -196,15 +196,14 @@
                                 <li th:each="comment : ${comments}" class="list-group-item">
                                     <div>
                                         <!-- 댓글 내용 -->
-                                        <p><b th:text="${comment.user.username}"></b></p>
+                                        <p><b th:text="${comment.user.username}"></b><small>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Created at: <span th:text="${comment.formattedCreatedAt}"></span>
+                                        </small></p>
                                         <p><span th:text="${comment.content}"></span></p>
-                                        <small>
-                                            Posted at: <span th:text="${comment.formattedCreatedAt}"></span>
-                                        </small>
                                     </div>
                                     <!-- 대댓글 버튼 -->
                                     <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
-                                            th:attr="data-target='#replyForm${comment.id}'">
+                                            th:attr="data-target='#replyForm' + ${comment.id}">
                                         Reply
                                     </button>
                                     <!-- 대댓글 폼 -->
@@ -214,7 +213,7 @@
                                             <input type="hidden" name="referenceId" th:value="${announcement.id}">
                                             <input type="hidden" name="commentType" value="PUBLIC_ANNOUNCEMENT">
                                             <div class="form-group">
-                                                <textarea class="form-control" name="content" placeholder="Write a reply..." rows="2" required></textarea>
+                                                <textarea class="form-control" name="content" placeholder="Write a comment..." rows="2" required></textarea>
                                             </div>
                                             <button type="submit" class="btn btn-sm btn-primary">Reply</button>
                                         </form>
@@ -223,10 +222,11 @@
                                     <ul class="list-group mt-2" th:if="${comment.replies}">
                                         <li th:each="reply : ${comment.replies}" class="list-group-item ml-4">
                                             <div>
-                                                <p><b th:text="${reply.user.username}"></b>: <span th:text="${reply.content}"></span></p>
-                                                <small>
-                                                    Posted at: <span th:text="${reply.formattedCreatedAt}"></span>
-                                                </small>
+                                                <p><b th:text="${reply.user.username}"></b> <small>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Created at: <span th:text="${reply.formattedCreatedAt}"></span>
+                                                </small></p>
+                                                <p><span th:text="${reply.content}"></span></p>
+
                                             </div>
                                         </li>
                                     </ul>
