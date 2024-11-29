@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
@@ -160,7 +161,8 @@ public class NotificationController {
                              @RequestParam Long referenceId,
                              @RequestParam String commentType,
                              @RequestParam(required = false) Long parentCommentId,
-                             Principal principal) {
+                             Principal principal,
+                             RedirectAttributes redirectAttributes) {
         // 로그인된 사용자 이메일로 조회
         String email = principal.getName();
         User currentUser = userRepository.findByEmail(email)
@@ -168,6 +170,8 @@ public class NotificationController {
 
         // 댓글 저장
         commentService.addComment(content, referenceId, commentType, parentCommentId, currentUser.getUsername());
+
+        redirectAttributes.addFlashAttribute("successMessage", "Comment has been added successfully!");
 
         // 리다이렉트 URL 결정
         if ("PUBLIC_ANNOUNCEMENT".equalsIgnoreCase(commentType)) {
@@ -182,17 +186,53 @@ public class NotificationController {
     public String updateComment(@RequestParam Long commentId,
                                 @RequestParam String content,
                                 @RequestParam Long referenceId,
-                                Principal principal) {
+                                Principal principal,
+                                RedirectAttributes redirectAttributes) {
         User currentUser = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
 
-        // 댓글 업데이트
         commentService.updateComment(commentId, content, currentUser);
 
-        // 리다이렉트 URL 결정
+        // 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("successMessage", "Comment has been updated successfully!");
+
         return "redirect:/view/notifications/myPublicAnnouncementForm/" + referenceId;
     }
 
+    @PostMapping("/updateReply")
+    public String updateReply(@RequestParam Long commentId,
+                              @RequestParam String content,
+                              @RequestParam Long referenceId,
+                              Principal principal,
+                              RedirectAttributes redirectAttributes) {
+        User currentUser = userRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
+
+        commentService.updateComment(commentId, content, currentUser);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Reply has been updated successfully!");
+
+        return "redirect:/view/notifications/myPublicAnnouncementForm/" + referenceId;
+    }
+
+    @PostMapping("/deleteComment")
+    public String deleteComment(@RequestParam Long commentId,
+                                @RequestParam Long referenceId,
+                                Principal principal,
+                                RedirectAttributes redirectAttributes) {
+        // 현재 로그인한 사용자 확인
+        User currentUser = userRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
+
+        // 댓글 삭제 처리
+        commentService.deleteComment(commentId, currentUser);
+
+        // 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("successMessage", "Comment or reply deleted successfully!");
+
+        // 공고문 페이지로 리다이렉트
+        return "redirect:/view/notifications/myPublicAnnouncementForm/" + referenceId;
+    }
 
 
 }

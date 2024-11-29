@@ -21,6 +21,7 @@
     <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/sidebar.css}" rel="stylesheet"/>
     <link th:href="@{/assets/css/myPublicAnnouncementFrom_Button/button_update_delete.css}" rel="stylesheet"/>
+    <Link th:href="@{/assets/css/Announcement/announcementComment.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="wrapper">
@@ -44,7 +45,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{dashboard}">
+                    <a th:href="@{/view/dashboard}">
                         <i class="nc-icon nc-bank"></i>
                         <p>Dashboard</p>
                     </a>
@@ -191,7 +192,7 @@
                                 </form>
 
                                 <!-- Back 버튼 -->
-                                <button class="btn btn-secondary btn-uniform" onclick="history.back()">Back to Notifications</button>
+                                <a class="btn btn-secondary btn-uniform" href="/view/notifications">Back to Notifications</a>
                             </div>
                             <script>
                                 // Update 버튼 클릭 시 확인 창 표시
@@ -204,6 +205,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-8 offset-md-2">
                     <div class="card">
@@ -211,9 +213,13 @@
                             <h5 class="card-title">Comments</h5>
                         </div>
                         <div class="card-body">
+                            <!-- 성공 메시지를 알림으로 표시 -->
+                            <script th:if="${successMessage}" th:inline="javascript">
+                                alert([[${successMessage}]]);
+                            </script>
                             <!-- 댓글 리스트 -->
                             <ul class="list-group">
-                                <li th:each="comment : ${comments}" class="list-group-item">
+                                <li th:each="comment : ${comments}" class="list-group-item" style="position: relative; padding-right: 100px;">
                                     <div>
                                         <!-- 댓글 내용 -->
                                         <p><b th:text="${comment.user.username}"></b>
@@ -223,23 +229,26 @@
                                             </small>
                                         </p>
                                         <p th:text="${comment.content}"></p>
+                                    </div>
 
-                                        <!-- 댓글 수정/삭제 버튼 -->
-                                        <div class="btn-group" role="group">
-                                            <!-- 본인이 작성한 댓글 수정 -->
-                                            <button th:if="${comment.user.email == #authentication.principal.username}"
-                                                    class="btn btn-sm btn-secondary"
-                                                    type="button" data-toggle="modal"
-                                                    th:attr="data-target='#editCommentModal' + ${comment.id}">
-                                                Edit
+                                    <!-- 댓글 수정/삭제 버튼 -->
+                                    <div class="btn-group" role="group" style="position: absolute; top: 0; right: 10px;">
+                                        <!-- 본인이 작성한 댓글 수정 -->
+                                        <button th:if="${comment.user.email == #authentication.principal.username}"
+                                                class="btn btn-sm btn-link text-secondary"
+                                                type="button" data-toggle="modal"
+                                                th:attr="data-target='#editCommentModal' + ${comment.id}">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <!-- 공고 작성자는 모든 댓글 삭제 가능 -->
+                                        <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post" style="display: inline;">
+                                            <input type="hidden" name="commentId" th:value="${comment.id}">
+                                            <input type="hidden" name="referenceId" th:value="${announcement.id}">
+                                            <button type="submit" class="btn btn-sm btn-link text-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this comment?')">
+                                                <i class="fa fa-trash"></i>
                                             </button>
-                                            <!-- 공고 작성자는 모든 댓글 삭제 가능 -->
-                                            <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post" style="display: inline;">
-                                                <input type="hidden" name="commentId" th:value="${comment.id}">
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
-                                            </form>
-                                        </div>
+                                        </form>
                                     </div>
 
                                     <!-- 댓글 수정 모달 -->
@@ -254,10 +263,11 @@
                                                 </div>
                                                 <form th:action="@{/updateComment}" method="post">
                                                     <input type="hidden" name="commentId" th:value="${comment.id}">
+                                                    <input type="hidden" name="referenceId" th:value="${announcement.id}"> <!-- referenceId 추가 -->
                                                     <div class="modal-body">
                                                         <div class="form-group">
-                                                <textarea class="form-control" name="content" rows="3"
-                                                          th:text="${comment.content}" required></textarea>
+                                                            <textarea class="form-control" name="content" rows="3"
+                                                                      th:text="${comment.content}" required></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -265,6 +275,7 @@
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                     </div>
                                                 </form>
+
                                             </div>
                                         </div>
                                     </div>
@@ -290,8 +301,9 @@
 
                                     <!-- 대댓글 리스트 -->
                                     <ul class="list-group mt-2" th:if="${comment.replies}">
-                                        <li th:each="reply : ${comment.replies}" class="list-group-item ml-4">
+                                        <li th:each="reply : ${comment.replies}" class="list-group-item ml-4" style="position: relative; padding-right: 100px;">
                                             <div>
+                                                <!-- 대댓글 내용 -->
                                                 <p><b th:text="${reply.user.username}"></b>
                                                     <small>
                                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Created at:
@@ -299,25 +311,26 @@
                                                     </small>
                                                 </p>
                                                 <p th:text="${reply.content}"></p>
+                                            </div>
 
-                                                <!-- 대댓글 수정/삭제 버튼 -->
-                                                <div class="btn-group" role="group">
-                                                    <!-- 본인이 작성한 대댓글 수정 -->
-                                                    <button
-                                                            th:if="${reply.user.email == #authentication.principal.username}"
-                                                            class="btn btn-sm btn-secondary"
-                                                            type="button" data-toggle="modal"
-                                                            th:attr="data-target='#editReplyModal' + ${reply.id}">
-                                                        Edit
+                                            <!-- 대댓글 수정/삭제 버튼 -->
+                                            <div class="btn-group" role="group" style="position: absolute; top: 0; right: 10px;">
+                                                <!-- 본인이 작성한 대댓글 수정 -->
+                                                <button th:if="${reply.user.email == #authentication.principal.username}"
+                                                        class="btn btn-sm btn-link text-secondary"
+                                                        type="button" data-toggle="modal"
+                                                        th:attr="data-target='#editReplyModal' + ${reply.id}">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <!-- 공고 작성자는 모든 대댓글 삭제 가능 -->
+                                                <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post" style="display: inline;">
+                                                    <input type="hidden" name="commentId" th:value="${reply.id}">
+                                                    <input type="hidden" name="referenceId" th:value="${announcement.id}">
+                                                    <button type="submit" class="btn btn-sm btn-link text-danger"
+                                                            onclick="return confirm('Are you sure you want to delete this reply?')">
+                                                        <i class="fa fa-trash"></i>
                                                     </button>
-
-                                                    <!-- 공고 작성자는 모든 대댓글 삭제 가능 -->
-                                                    <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post" style="display: inline;">
-                                                        <input type="hidden" name="commentId" th:value="${reply.id}">
-                                                        <button type="submit" class="btn btn-sm btn-danger"
-                                                                onclick="return confirm('Are you sure you want to delete this reply?')">Delete</button>
-                                                    </form>
-                                                </div>
+                                                </form>
                                             </div>
 
                                             <!-- 대댓글 수정 모달 -->
@@ -330,12 +343,13 @@
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <form th:action="@{/updateComment}" method="post">
-                                                            <input type="hidden" name="commentId" th:value="${reply.id}">
+                                                        <form th:action="@{/updateReply}" method="post"> <!-- Action 수정 -->
+                                                            <input type="hidden" name="commentId" th:value="${reply.id}"> <!-- reply.id로 수정 -->
+                                                            <input type="hidden" name="referenceId" th:value="${announcement.id}"> <!-- referenceId 유지 -->
                                                             <div class="modal-body">
                                                                 <div class="form-group">
-                                                        <textarea class="form-control" name="content" rows="3"
-                                                                  th:text="${reply.content}" required></textarea>
+                                                                    <textarea class="form-control" name="content" rows="3"
+                                                                              th:text="${reply.content}" required></textarea> <!-- reply.conten로 수정 -->
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -364,8 +378,6 @@
                     </div>
                 </div>
             </div>
-
-
             <footer class="footer footer-black footer-white fixed-footer">
             <div class="container-fluid">
                 <div class="row">

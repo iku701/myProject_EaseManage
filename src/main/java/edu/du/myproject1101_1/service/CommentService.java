@@ -55,8 +55,12 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
 
-        // 권한 확인: 댓글 작성자인지 확인
-        if (!comment.getUser().getId().equals(currentUser.getId())) {
+        // 공고 작성자 가져오기
+        PublicAnnouncement announcement = announcementRepository.findById(comment.getReferenceId())
+                .orElseThrow(() -> new RuntimeException("Public Announcement not found with ID: " + comment.getReferenceId()));
+
+        // 권한 확인: 댓글 작성자 또는 공고 작성자인 경우 삭제 가능
+        if (!comment.getUser().getId().equals(currentUser.getId()) && !announcement.getPostedBy().getId().equals(currentUser.getId())) {
             throw new RuntimeException("You are not authorized to delete this comment.");
         }
 
