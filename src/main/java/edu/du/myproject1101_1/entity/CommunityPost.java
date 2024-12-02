@@ -7,10 +7,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "public_announcement")
+@Table(name = "community_post")
 @Getter
 @Setter
-public class PublicAnnouncement {
+public class CommunityPost {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,12 +19,8 @@ public class PublicAnnouncement {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 5000)
     private String content;
-
-    @ManyToOne
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project; // 올바르게 설정된 Project 엔티티를 기대
 
     @ManyToOne
     @JoinColumn(name = "posted_by", nullable = false)
@@ -47,7 +44,7 @@ public class PublicAnnouncement {
     }
 
     @Transient
-    private String formattedCreatedAt; // 데이터베이스에 저장되지 않음
+    private String formattedCreatedAt; // 포맷팅된 생성 날짜
 
     public String getFormattedCreatedAt() {
         return formattedCreatedAt;
@@ -58,7 +55,7 @@ public class PublicAnnouncement {
     }
 
     @Transient
-    private String formattedUpdatedAt;
+    private String formattedUpdatedAt; // 포맷팅된 업데이트 날짜
 
     public String getFormattedUpdatedAt() {
         return formattedUpdatedAt;
@@ -67,5 +64,4 @@ public class PublicAnnouncement {
     public void setFormattedUpdatedAt(String formattedUpdatedAt) {
         this.formattedUpdatedAt = formattedUpdatedAt;
     }
-
 }

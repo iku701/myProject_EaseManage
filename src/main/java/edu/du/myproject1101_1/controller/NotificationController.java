@@ -1,14 +1,8 @@
 package edu.du.myproject1101_1.controller;
 
-import edu.du.myproject1101_1.entity.Comment;
-import edu.du.myproject1101_1.entity.PublicAnnouncement;
-import edu.du.myproject1101_1.entity.Project;
-import edu.du.myproject1101_1.entity.User;
+import edu.du.myproject1101_1.entity.*;
 import edu.du.myproject1101_1.repository.UserRepository;
-import edu.du.myproject1101_1.service.CommentService;
-import edu.du.myproject1101_1.service.PublicAnnouncementService;
-import edu.du.myproject1101_1.service.ProjectService;
-import edu.du.myproject1101_1.service.UserService;
+import edu.du.myproject1101_1.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -27,6 +21,7 @@ import java.util.List;
 public class NotificationController {
 
     private final PublicAnnouncementService announcementService;
+    private final CommunityPostService communityPostService;
     private final ProjectService projectService;
     private final UserRepository userRepository;
     private final UserService userService;
@@ -36,8 +31,10 @@ public class NotificationController {
                                   ProjectService projectService,
                                   UserRepository userRepository,
                                   UserService userService,
-                                  CommentService commentService) {
+                                  CommentService commentService,
+                                  CommunityPostService communityPostService) {
         this.announcementService = announcementService;
+        this.communityPostService = communityPostService;
         this.projectService = projectService;
         this.userRepository = userRepository;
         this.userService = userService;
@@ -45,8 +42,10 @@ public class NotificationController {
     }
 
     @GetMapping("/view/notifications")
-    public String viewNotifications(@RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "5") int size,
+    public String viewNotifications(@RequestParam(defaultValue = "0") int announcementPage,
+                                    @RequestParam(defaultValue = "0") int communityPage,
+                                    @RequestParam(defaultValue = "5") int announcementSize,
+                                    @RequestParam(defaultValue = "6") int communitySize,
                                     Model model, Principal principal) {
         // 로그인된 사용자 가져오기
         User currentUser = userService.getUserByEmail(principal.getName())
@@ -56,19 +55,28 @@ public class NotificationController {
         List<Project> projects = projectService.getProjectsByUser(currentUser);
         model.addAttribute("projects", projects);
 
-        Page<PublicAnnouncement> announcements = announcementService.getPagedAnnouncements(PageRequest.of(page, size));
-
-        // 날짜 포맷팅
+        // 공고문 페이징 처리
+        Page<PublicAnnouncement> announcements = announcementService.getPagedAnnouncements(PageRequest.of(announcementPage, announcementSize));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         announcements.getContent().forEach(announcement -> {
             announcement.setFormattedCreatedAt(announcement.getCreatedAt().format(formatter));
         });
 
-        // 공고 목록 페이징
+        // 자유게시판 페이징 처리
+        Page<CommunityPost> communityPosts = communityPostService.getPagedCommunityPosts(PageRequest.of(communityPage, communitySize));
+        communityPosts.getContent().forEach(post -> {
+            post.setFormattedCreatedAt(post.getCreatedAt().format(formatter));
+        });
+
+        // 공고문 및 자유게시판 목록 페이징
         model.addAttribute("announcements", announcements.getContent());
-        model.addAttribute("currentPage", announcements.getNumber());
-        model.addAttribute("totalPages", announcements.getTotalPages());
-        model.addAttribute("pageSize", size);
+        model.addAttribute("communityPosts", communityPosts.getContent());
+        model.addAttribute("announcementCurrentPage", announcementPage);
+        model.addAttribute("communityCurrentPage", communityPage);
+        model.addAttribute("announcementTotalPages", announcements.getTotalPages());
+        model.addAttribute("communityTotalPages", communityPosts.getTotalPages());
+        model.addAttribute("announcementPageSize", announcementSize);
+        model.addAttribute("communityPageSize", communitySize);
 
         model.addAttribute("username", currentUser.getUsername()); // 사이드바에 표시될 사용자 이름 추가
 
@@ -234,5 +242,88 @@ public class NotificationController {
         return "redirect:/view/notifications/myPublicAnnouncementForm/" + referenceId;
     }
 
+    @PostMapping("/addCommunityPost")
+    public String addCommunityPost(@RequestParam String title,
+                                   @RequestParam String content,
+                                   Principal principal) {
+        // 이메일로 사용자 조회
+        String email = principal.getName();
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found: " + email));
 
+        // 자유게시글 저장
+        communityPostService.addCommunityPost(title, content, currentUser);
+
+        // 알림 페이지로 리다이렉트
+        return "redirect:/view/notifications";
+    }
+
+    // 자유게시판 상세보기
+    @GetMapping("/view/notifications/myCommunityPostForm/{id}")
+    public String viewCommunityPostDetail(@PathVariable Long id, Model model, Principal principal) {
+        // 현재 로그인된 사용자 가져오기
+        User currentUser = userService.getUserByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
+
+        CommunityPost post = communityPostService.getPostById(id);
+
+        if (post == null) {
+            throw new RuntimeException("Community Post not found with ID: " + id);
+        }
+
+        // 댓글 가져오기
+        List<Comment> comments = commentService.getCommentsByReferenceIdAndType(id, "COMMUNITY_POST");
+
+        // 날짜 포맷터
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        comments.forEach(comment -> {
+            comment.setFormattedCreatedAt(comment.getCreatedAt().format(formatter));
+
+            if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
+                comment.getReplies().forEach(reply -> reply.setFormattedCreatedAt(reply.getCreatedAt().format(formatter)));
+            }
+        });
+
+        // 본인이 작성한 게시글인지 확인
+        boolean isOwner = post.getPostedBy().getId().equals(currentUser.getId());
+        model.addAttribute("isOwner", isOwner);
+
+        // 게시글 날짜 포맷
+        post.setFormattedCreatedAt(post.getCreatedAt().format(formatter));
+        model.addAttribute("post", post);
+        model.addAttribute("comments", comments);
+        model.addAttribute("username", currentUser.getUsername());
+
+        return isOwner ? "view/community/myCommunityPostForm" : "view/community/viewCommunityPostForm";
+    }
+
+    // 자유게시판 글 수정
+    @PostMapping("/updateCommunityPost")
+    public String updateCommunityPost(@RequestParam Long postId,
+                                      @RequestParam String title,
+                                      @RequestParam String content,
+                                      Principal principal,
+                                      RedirectAttributes redirectAttributes) {
+        User currentUser = userService.getUserByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
+
+        communityPostService.updateCommunityPost(postId, title, content, currentUser);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Post updated successfully!");
+        return "redirect:/view/notifications/myCommunityPostForm/" + postId;
+    }
+
+    // 자유게시판 글 삭제
+    @PostMapping("/deleteCommunityPost")
+    public String deleteCommunityPost(@RequestParam Long postId,
+                                      Principal principal,
+                                      RedirectAttributes redirectAttributes) {
+        User currentUser = userService.getUserByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
+
+        communityPostService.deleteCommunityPost(postId, currentUser);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Post deleted successfully!");
+        return "redirect:/view/notifications";
+    }
 }

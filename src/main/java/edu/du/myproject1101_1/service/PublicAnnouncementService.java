@@ -7,7 +7,9 @@ import edu.du.myproject1101_1.repository.ProjectRepository;
 import edu.du.myproject1101_1.repository.PublicAnnouncementRepository;
 import edu.du.myproject1101_1.repository.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,7 +32,8 @@ public class PublicAnnouncementService {
 
     // 페이징 처리된 공지사항 가져오기
     public Page<PublicAnnouncement> getPagedAnnouncements(Pageable pageable) {
-        return announcementRepository.findAll(pageable);
+        return announcementRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     // 공지사항 추가
