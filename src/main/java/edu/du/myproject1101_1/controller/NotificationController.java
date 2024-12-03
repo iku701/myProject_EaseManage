@@ -147,6 +147,8 @@ public class NotificationController {
         return isOwner ? "view/notifications/myPublicAnnouncementForm" : "view/notifications/viewPublicAnnouncementForm";
     }
 
+
+
     @PostMapping("/updatePublicAnnouncement")
     public String updateAnnouncement(@RequestParam Long id,
                                      @RequestParam String title,
@@ -184,6 +186,9 @@ public class NotificationController {
         // 리다이렉트 URL 결정
         if ("PUBLIC_ANNOUNCEMENT".equalsIgnoreCase(commentType)) {
             return "redirect:/view/notifications/myPublicAnnouncementForm/" + referenceId;
+        }else if ("COMMUNITY_POST".equalsIgnoreCase(commentType)) {
+            // 다른 종류의 댓글인 경우 추가적인 리다이렉트 처리
+            return "redirect:/view/notifications/myCommunityPostForm/" + referenceId;
         } else {
             // 다른 종류의 댓글인 경우 추가적인 리다이렉트 처리
             return "redirect:/";
@@ -228,11 +233,11 @@ public class NotificationController {
                                 @RequestParam Long referenceId,
                                 Principal principal,
                                 RedirectAttributes redirectAttributes) {
-        // 현재 로그인한 사용자 확인
+        // 현재 로그인한 사용자 정보 확인
         User currentUser = userRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
+           .orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
 
-        // 댓글 삭제 처리
+        // 댓글 삭제 처리 (댓글 및 대댓글 포함)
         commentService.deleteComment(commentId, currentUser);
 
         // 성공 메시지 설정
@@ -294,7 +299,7 @@ public class NotificationController {
         model.addAttribute("comments", comments);
         model.addAttribute("username", currentUser.getUsername());
 
-        return isOwner ? "view/community/myCommunityPostForm" : "view/community/viewCommunityPostForm";
+        return isOwner ? "view/notifications/myCommunityPostForm" : "view/notifications/viewCommunityPostForm";
     }
 
     // 자유게시판 글 수정

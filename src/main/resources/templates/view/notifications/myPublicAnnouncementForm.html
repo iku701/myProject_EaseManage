@@ -1,411 +1,443 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8"/>
-    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
-    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>
-        Ease Management
-    </title>
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-          name='viewport'/>
-    <!-- Fonts and icons -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet"/>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <!-- CSS Files -->
-    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/sidebar.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/myPublicAnnouncementFrom_Button/button_update_delete.css}" rel="stylesheet"/>
-    <Link th:href="@{/assets/css/Announcement/announcementComment.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/Announcement/publicAnnouncementForm.css}" rel="stylesheet"/>
+   <meta charset="utf-8"/>
+   <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
+   <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+   <title>
+      Ease Management
+   </title>
+   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+         name='viewport'/>
+   <!-- Fonts and icons -->
+   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet"/>
+   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+   <!-- CSS Files -->
+   <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/css/paper-dashboard.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/css/myProject.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/demo/demo.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/css/otherProjectPagination.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/css/sidebar.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/css/myPublicAnnouncementFrom_Button/button_update_delete.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/css/Announcement/announcementComment.css}" rel="stylesheet"/>
+   <link th:href="@{/assets/css/Announcement/publicAnnouncementForm.css}" rel="stylesheet"/>
 
 </head>
 <body>
 <div class="wrapper">
-    <div class="sidebar" data-color="white" data-active-color="danger">
-        <div class="logo">
-            <a class="simple-text logo-mini">
-                <div class="logo-image-small">
-                    <img th:src="@{/assets/img/apple-icon.png}">
-                </div>
-            </a>
-            <a class="simple-text logo-normal">
-                Ease Management
-            </a>
-        </div>
-        <div class="sidebar-wrapper">
-            <ul class="nav">
-                <li>
-                    <a th:href="@{/myProject}">
-                        <i class="nc-icon nc-paper"></i>
-                        <p>My Project</p>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/view/dashboard}">
-                        <i class="nc-icon nc-bank"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/view/otherProjects}">
-                        <i class="nc-icon nc-bullet-list-67"></i>
-                        <p>Other Project</p>
-                    </a>
-                </li>
-                <li class="active">
-                    <a th:href="@{/view/notifications}">
+   <div class="sidebar" data-color="white" data-active-color="danger">
+      <div class="logo">
+         <a class="simple-text logo-mini">
+            <div class="logo-image-small">
+               <img th:src="@{/assets/img/apple-icon.png}">
+            </div>
+         </a>
+         <a class="simple-text logo-normal">
+            Ease Management
+         </a>
+      </div>
+      <div class="sidebar-wrapper">
+         <ul class="nav">
+            <li>
+               <a th:href="@{/myProject}">
+                  <i class="nc-icon nc-paper"></i>
+                  <p>My Project</p>
+               </a>
+            </li>
+            <li>
+               <a th:href="@{/view/dashboard}">
+                  <i class="nc-icon nc-bank"></i>
+                  <p>Dashboard</p>
+               </a>
+            </li>
+            <li>
+               <a th:href="@{/view/otherProjects}">
+                  <i class="nc-icon nc-bullet-list-67"></i>
+                  <p>Other Project</p>
+               </a>
+            </li>
+            <li class="active">
+               <a th:href="@{/view/notifications}">
+                  <i class="nc-icon nc-bell-55"></i>
+                  <p>Notification</p>
+               </a>
+            </li>
+            <li>
+               <a th:href="@{/view/user}">
+                  <i class="nc-icon nc-single-02"></i>
+                  <p th:text="${username}"></p>
+               </a>
+            </li>
+            <li class="active-pro">
+               <a th:href="@{/view/upgrade}">
+                  <i class="nc-icon nc-spaceship"></i>
+                  <p>Upgrade to PRO</p>
+               </a>
+            </li>
+            <!-- 로그아웃 -->
+            <li class="logout">
+               <a th:href="@{/logout}">
+                  <i class="nc-icon nc-button-power"></i>
+                  <p>Logout</p>
+               </a>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+         <div class="container-fluid">
+            <div class="navbar-wrapper">
+               <a class="navbar-brand" href="javascript:;">Notification</a>
+            </div>
+            <div class="collapse navbar-collapse justify-content-end" id="navigation">
+               <form class="form-inline" style="margin-right: 20px; flex: 1;">
+                  <div class="input-group no-border" style="width: 100%; max-width: 500px;">
+                     <input type="text" class="form-control" placeholder="Search..." style="width: 100%;">
+                     <div class="input-group-append">
+                        <div class="input-group-text">
+                           <i class="nc-icon nc-zoom-split"></i>
+                        </div>
+                     </div>
+                  </div>
+               </form>
+               <ul class="navbar-nav">
+                  <li class="nav-item" style="margin-right: 15px;">
+                     <a class="nav-link btn-magnify" href="javascript:;">
+                        <i class="nc-icon nc-layout-11"></i>
+                        <span class="d-lg-none d-md-block">Stats</span>
+                     </a>
+                  </li>
+                  <li class="nav-item btn-rotate dropdown" style="margin-right: 15px;">
+                     <a class="nav-link dropdown-toggle" href="javascript:;" id="navbarDropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="nc-icon nc-bell-55"></i>
-                        <p>Notification</p>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/view/user}">
-                        <i class="nc-icon nc-single-02"></i>
-                        <p th:text="${username}"></p>
-                    </a>
-                </li>
-                <li class="active-pro">
-                    <a th:href="@{/view/upgrade}">
-                        <i class="nc-icon nc-spaceship"></i>
-                        <p>Upgrade to PRO</p>
-                    </a>
-                </li>
-                <!-- 로그아웃 -->
-                <li class="logout">
-                    <a th:href="@{/logout}">
-                        <i class="nc-icon nc-button-power"></i>
-                        <p>Logout</p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="main-panel">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
-            <div class="container-fluid">
-                <div class="navbar-wrapper">
-                    <a class="navbar-brand" href="javascript:;">Notification</a>
-                </div>
-                <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                    <form class="form-inline" style="margin-right: 20px; flex: 1;">
-                        <div class="input-group no-border" style="width: 100%; max-width: 500px;">
-                            <input type="text" class="form-control" placeholder="Search..." style="width: 100%;">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <i class="nc-icon nc-zoom-split"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <ul class="navbar-nav">
-                        <li class="nav-item" style="margin-right: 15px;">
-                            <a class="nav-link btn-magnify" href="javascript:;">
-                                <i class="nc-icon nc-layout-11"></i>
-                                <span class="d-lg-none d-md-block">Stats</span>
-                            </a>
-                        </li>
-                        <li class="nav-item btn-rotate dropdown" style="margin-right: 15px;">
-                            <a class="nav-link dropdown-toggle" href="javascript:;" id="navbarDropdownMenuLink"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="nc-icon nc-bell-55"></i>
-                                <span class="d-lg-none d-md-block">Notifications</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn-rotate" href="javascript:;">
-                                <i class="nc-icon nc-settings-gear-65"></i>
-                                <span class="d-lg-none d-md-block">Account</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                        <span class="d-lg-none d-md-block">Notifications</span>
+                     </a>
+                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link btn-rotate" href="javascript:;">
+                        <i class="nc-icon nc-settings-gear-65"></i>
+                        <span class="d-lg-none d-md-block">Account</span>
+                     </a>
+                  </li>
+               </ul>
             </div>
-        </nav>
-            <!-- End Navbar -->
-        <div class="content">
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">PROJECT.
-                                <span th:text="${announcement.project.projectName}"></span></h3><br>
-                            <p class="card-category">       </p>
+         </div>
+      </nav>
+      <!-- End Navbar -->
+      <div class="content">
+         <div class="row">
+            <div class="col-md-8 offset-md-2">
+               <div class="card">
+                  <div class="card-header">
+                     <h3 class="card-title">PROJECT.
+                        <span th:text="${announcement.project.projectName}"></span></h3><br>
+                     <p class="card-category"></p>
+                  </div>
+                  <div class="card-body">
+                     <!-- 공지사항 상세보기 -->
+                     <div>
+                        <h6><b>Title:</b> <span th:text="${announcement.title}"></span></h6><br>
+                        <h6><b>Posted by:</b> <span th:text="${announcement.postedBy.username}"></span></h6><br>
+                        <p><b>Content:</b></p>
+                        <p th:text="${announcement.content}"></p>
+                        <p><small><b>Create :</b> <span th:text="${announcement.formattedCreatedAt}"></span></small>
+                        </p>
+                        <p><small><b>Update :</b> <span th:text="${announcement.formattedUpdatedAt}"></span></small>
+                        </p>
+                     </div>
+
+                     <!-- 수정 및 삭제 폼 -->
+                     <form id="updateForm" th:action="@{/updatePublicAnnouncement}" method="post">
+                        <input type="hidden" name="id" th:value="${announcement.id}">
+                        <div class="form-group">
+                           <label for="announcementTitle">Title</label>
+                           <input type="text" class="form-control" id="announcementTitle" name="title"
+                                  th:value="${announcement.title}" required>
                         </div>
-                        <div class="card-body">
-                            <!-- 공지사항 상세보기 -->
-                            <div>
-                                <h6><b>Title:</b> <span th:text="${announcement.title}"></span></h6><br>
-                                <h6><b>Posted by:</b> <span th:text="${announcement.postedBy.username}"></span></h6><br>
-                                <p><b>Content:</b></p>
-                                <p th:text="${announcement.content}"></p>
-                                <p><small><b>Created At:</b> <span th:text="${announcement.formattedCreatedAt}"></span></small></p>
-                                <p><small><b>Updated At:</b> <span th:text="${announcement.formattedUpdatedAt}"></span></small></p>
-                            </div>
-
-                            <!-- 수정 및 삭제 버튼 -->
-                            <form id="updateForm" th:action="@{/updatePublicAnnouncement}" method="post">
-                                <input type="hidden" name="id" th:value="${announcement.id}">
-                                <div class="form-group">
-                                    <label for="announcementTitle">Title</label>
-                                    <input type="text" class="form-control" id="announcementTitle" name="title"
-                                           th:value="${announcement.title}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="announcementContent">Content</label>
-                                    <textarea
-                                            class="form-control"
-                                            id="announcementContent"
-                                            name="content"
-                                            required
-                                            th:text="${announcement.content}"
-                                            style="height: 300px; resize: none;"></textarea>
-                                </div>
-                            </form>
-                            <!-- 버튼 영역 -->
-                            <div class="d-flex justify-content-center align-items-center mt-2" style="gap: 10px;">
-                                <!-- Update 버튼 -->
-                                <button
-                                        type="submit"
-                                        form="updateForm"
-                                        class="btn btn-primary"
-                                        onclick="return confirmUpdate();">Update
-                                </button>
-
-                                <!-- Delete 버튼 -->
-                                <form th:action="@{/deletePublicAnnouncement}" method="post" style="margin: 0;">
-                                    <input type="hidden" name="id" th:value="${announcement.id}">
-                                    <button
-                                            type="submit"
-                                            class="btn btn-danger btn-uniform"
-                                            onclick="return confirm('Are you sure you want to delete this announcement?')">Delete
-                                    </button>
-                                </form>
-
-                                <!-- Back 버튼 -->
-                                <a class="btn btn-secondary btn-uniform" href="/view/notifications">Back to Notifications</a>
-                            </div>
-                            <script>
-                                // Update 버튼 클릭 시 확인 창 표시
-                                function confirmUpdate() {
-                                    return confirm('Are you sure you want to update this announcement?');
-                                }
-                            </script>
+                        <div class="form-group">
+                           <label for="announcementContent">Content</label>
+                           <textarea
+                              class="form-control"
+                              id="announcementContent"
+                              name="content"
+                              required
+                              th:text="${announcement.content}"
+                              style="height: 300px; resize: none;"></textarea>
                         </div>
+                     </form>
+                     <!-- 버튼 영역 -->
+                     <div class="d-flex justify-content-center align-items-center mt-2" style="gap: 10px;">
+                        <!-- Update 버튼 -->
+                        <button
+                           type="submit"
+                           form="updateForm"
+                           class="btn btn-primary"
+                           onclick="return confirmUpdate();">Update
+                        </button>
 
-                    </div>
-                </div>
+                        <!-- Delete 버튼 -->
+                        <form th:action="@{/deletePublicAnnouncement}" method="post" style="margin: 0;">
+                           <input type="hidden" name="id" th:value="${announcement.id}">
+                           <button
+                              type="submit"
+                              class="btn btn-danger btn-uniform"
+                              onclick="return confirm('Are you sure you want to delete this announcement?')">
+                              Delete
+                           </button>
+                        </form>
+
+                        <!-- Back 버튼 -->
+                        <a class="btn btn-secondary btn-uniform" href="/view/notifications">Back to
+                           Notifications</a>
+                     </div>
+                     <script>
+                        // Update 버튼 클릭 시 확인 창 표시
+                        function confirmUpdate() {
+                           return confirm('Are you sure you want to update this announcement?');
+                        }
+                     </script>
+                  </div>
+
+               </div>
             </div>
+         </div>
 
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Comments</h5>
-                        </div>
-                        <div class="card-body">
-                            <!-- 성공 메시지를 알림으로 표시 -->
-                            <script th:if="${successMessage}" th:inline="javascript">
-                                alert([[${successMessage}]]);
-                            </script>
-                            <!-- 댓글 리스트 -->
-                            <ul class="list-group">
-                                <li th:each="comment : ${comments}" class="list-group-item custom-list-item" style="position: relative; padding-right: 100px;">
-                                    <div class="custom-link">
-                                        <!-- 댓글 내용 -->
-                                        <p><b th:text="${comment.user.username}"></b>
-                                            <small>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Created at:
-                                                <span th:text="${comment.formattedCreatedAt}"></span>
-                                            </small>
-                                        </p>
-                                        <p th:text="${comment.content}"></p>
+         <div class="row">
+            <div class="col-md-8 offset-md-2">
+               <div class="card">
+                  <div class="card-header">
+                     <h5 class="card-title">Comments</h5>
+                     <p class="card-category"></p>
+                  </div>
+                  <div class="card-body">
+                     <!-- 성공 메시지를 알림으로 표시 -->
+                     <script th:if="${successMessage}" th:inline="javascript">
+                        alert([[${successMessage}]]);
+                     </script>
+                     <!-- 댓글 리스트 -->
+                     <ul class="list-group">
+                        <li th:each="comment : ${comments}" class="list-group-item custom-list-item"
+                            style="position: relative; padding-right: 100px;">
+                           <div>
+                              <!-- 댓글 내용 -->
+                              <p><b th:text="${comment.user.username}"></b>
+                                 <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span th:text="${comment.formattedCreatedAt}"></span>
+                                 </small>
+                              </p>
+                              <p th:text="${comment.content}"></p>
+                           </div>
+
+                           <!-- 댓글 수정/삭제 버튼 -->
+                           <div class="btn-group" role="group"
+                                style="position: absolute; top: 0; right: 10px;">
+                              <!-- 본인이 작성한 댓글 수정 -->
+                              <button th:if="${comment.user.email == #authentication.principal.username}"
+                                      class="btn btn-sm btn-link text-secondary"
+                                      type="button" data-toggle="modal"
+                                      th:attr="data-target='#editCommentModal' + ${comment.id}">
+                                 <i class="fa fa-edit"></i>
+                              </button>
+                              <!-- 공고 작성자는 모든 댓글 삭제 가능 -->
+                              <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post"
+                                    style="display: inline;">
+                                 <input type="hidden" name="commentId" th:value="${comment.id}">
+                                 <input type="hidden" name="referenceId" th:value="${announcement.id}">
+                                 <button type="submit" class="btn btn-sm btn-link text-danger"
+                                         onclick="return confirm('Are you sure you want to delete this comment?')">
+                                    <i class="fa fa-trash"></i>
+                                 </button>
+                              </form>
+                           </div>
+
+
+                           <!-- 댓글 수정 모달 -->
+                           <div class="modal fade" th:id="'editCommentModal' + ${comment.id}" tabindex="-1"
+                                role="dialog">
+                              <div class="modal-dialog" role="document">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h5 class="modal-title">Edit Comment</h5>
+                                       <button type="button" class="close" data-dismiss="modal"
+                                               aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                       </button>
                                     </div>
-
-                                    <!-- 댓글 수정/삭제 버튼 -->
-                                    <div class="btn-group" role="group" style="position: absolute; top: 0; right: 10px;">
-                                        <!-- 본인이 작성한 댓글 수정 -->
-                                        <button th:if="${comment.user.email == #authentication.principal.username}"
-                                                class="btn btn-sm btn-link text-secondary"
-                                                type="button" data-toggle="modal"
-                                                th:attr="data-target='#editCommentModal' + ${comment.id}">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
-                                        <!-- 공고 작성자는 모든 댓글 삭제 가능 -->
-                                        <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post" style="display: inline;">
-                                            <input type="hidden" name="commentId" th:value="${comment.id}">
-                                            <input type="hidden" name="referenceId" th:value="${announcement.id}">
-                                            <button type="submit" class="btn btn-sm btn-link text-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this comment?')">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-
-
-                                    <!-- 댓글 수정 모달 -->
-                                    <div class="modal fade" th:id="'editCommentModal' + ${comment.id}" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit Comment</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <form th:action="@{/updateComment}" method="post">
-                                                    <input type="hidden" name="commentId" th:value="${comment.id}">
-                                                    <input type="hidden" name="referenceId" th:value="${announcement.id}"> <!-- referenceId 추가 -->
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
+                                    <form th:action="@{/updateComment}" method="post">
+                                       <input type="hidden" name="commentId" th:value="${comment.id}">
+                                       <input type="hidden" name="referenceId"
+                                              th:value="${announcement.id}"> <!-- referenceId 추가 -->
+                                       <div class="modal-body">
+                                          <div class="form-group">
                                                             <textarea class="form-control" name="content" rows="3"
                                                                       th:text="${comment.content}" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    </div>
-                                                </form>
+                                          </div>
+                                       </div>
+                                       <div class="modal-footer">
+                                          <button type="submit" class="btn btn-primary">Save changes
+                                          </button>
+                                          <button type="button" class="btn btn-secondary"
+                                                  data-dismiss="modal">Cancel
+                                          </button>
+                                       </div>
+                                    </form>
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                 </div>
+                              </div>
+                           </div>
 
-                                    <!-- 대댓글 버튼 -->
-                                    <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
-                                            th:attr="data-target='#replyForm' + ${comment.id}">
-                                        Reply
+                           <!-- 대댓글 버튼 -->
+                           <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
+                                   th:attr="data-target='#replyForm' + ${comment.id}">
+                              Reply
+                           </button>
+
+                           <!-- 대댓글 폼 -->
+                           <div class="collapse mt-2" th:id="'replyForm' + ${comment.id}">
+                              <form th:action="@{/addComment}" method="post">
+                                 <input type="hidden" name="parentCommentId" th:value="${comment.id}">
+                                 <input type="hidden" name="referenceId" th:value="${announcement.id}">
+                                 <input type="hidden" name="commentType" value="PUBLIC_ANNOUNCEMENT">
+                                 <div class="form-group">
+                                    <textarea class="form-control" name="content" placeholder="Write a reply..."
+                                              rows="2" required></textarea>
+                                 </div>
+                                 <button type="submit" class="btn btn-sm btn-primary">Reply</button>
+                              </form>
+                           </div>
+
+                           <!-- 대댓글 리스트 -->
+                           <ul class="list-group mt-2" th:if="${comment.replies}">
+                              <li th:each="reply : ${comment.replies}" class="list-group-item ml-4"
+                                  style="position: relative; padding-right: 100px;">
+                                 <div>
+                                    <!-- 대댓글 내용 -->
+                                    <p><b th:text="${reply.user.username}"></b>
+                                       <small>
+                                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                          <span th:text="${reply.formattedCreatedAt}"></span>
+                                       </small>
+                                    </p>
+                                    <p th:text="${reply.content}"></p>
+                                 </div>
+
+                                 <!-- 대댓글 수정/삭제 버튼 -->
+                                 <div class="btn-group" role="group"
+                                      style="position: absolute; top: 0; right: 10px;">
+                                    <!-- 본인이 작성한 대댓글 수정 -->
+                                    <button th:if="${reply.user.email == #authentication.principal.username}"
+                                            class="btn btn-sm btn-link text-secondary"
+                                            type="button" data-toggle="modal"
+                                            th:attr="data-target='#editReplyModal' + ${reply.id}">
+                                       <i class="fa fa-edit"></i>
                                     </button>
+                                    <!-- 공고 작성자는 모든 대댓글 삭제 가능 -->
+                                    <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post"
+                                          style="display: inline;">
+                                       <input type="hidden" name="commentId" th:value="${reply.id}">
+                                       <input type="hidden" name="referenceId"
+                                              th:value="${announcement.id}">
+                                       <button type="submit" class="btn btn-sm btn-link text-danger"
+                                               onclick="return confirm('Are you sure you want to delete this reply?')">
+                                          <i class="fa fa-trash"></i>
+                                       </button>
+                                    </form>
+                                 </div>
 
-                                    <!-- 대댓글 폼 -->
-                                    <div class="collapse mt-2" th:id="'replyForm' + ${comment.id}">
-                                        <form th:action="@{/addComment}" method="post">
-                                            <input type="hidden" name="parentCommentId" th:value="${comment.id}">
-                                            <input type="hidden" name="referenceId" th:value="${announcement.id}">
-                                            <input type="hidden" name="commentType" value="PUBLIC_ANNOUNCEMENT">
-                                            <div class="form-group">
-                                                <textarea class="form-control" name="content" placeholder="Write a reply..." rows="2" required></textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-sm btn-primary">Reply</button>
-                                        </form>
-                                    </div>
-
-                                    <!-- 대댓글 리스트 -->
-                                    <ul class="list-group mt-2" th:if="${comment.replies}">
-                                        <li th:each="reply : ${comment.replies}" class="list-group-item ml-4" style="position: relative; padding-right: 100px;">
-                                            <div>
-                                                <!-- 대댓글 내용 -->
-                                                <p><b th:text="${reply.user.username}"></b>
-                                                    <small>
-                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Created at:
-                                                        <span th:text="${reply.formattedCreatedAt}"></span>
-                                                    </small>
-                                                </p>
-                                                <p th:text="${reply.content}"></p>
-                                            </div>
-
-                                            <!-- 대댓글 수정/삭제 버튼 -->
-                                            <div class="btn-group" role="group" style="position: absolute; top: 0; right: 10px;">
-                                                <!-- 본인이 작성한 대댓글 수정 -->
-                                                <button th:if="${reply.user.email == #authentication.principal.username}"
-                                                        class="btn btn-sm btn-link text-secondary"
-                                                        type="button" data-toggle="modal"
-                                                        th:attr="data-target='#editReplyModal' + ${reply.id}">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <!-- 공고 작성자는 모든 대댓글 삭제 가능 -->
-                                                <form th:if="${isOwner}" th:action="@{/deleteComment}" method="post" style="display: inline;">
-                                                    <input type="hidden" name="commentId" th:value="${reply.id}">
-                                                    <input type="hidden" name="referenceId" th:value="${announcement.id}">
-                                                    <button type="submit" class="btn btn-sm btn-link text-danger"
-                                                            onclick="return confirm('Are you sure you want to delete this reply?')">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-
-                                            <!-- 대댓글 수정 모달 -->
-                                            <div class="modal fade" th:id="'editReplyModal' + ${reply.id}" tabindex="-1" role="dialog">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Edit Reply</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <form th:action="@{/updateReply}" method="post"> <!-- Action 수정 -->
-                                                            <input type="hidden" name="commentId" th:value="${reply.id}"> <!-- reply.id로 수정 -->
-                                                            <input type="hidden" name="referenceId" th:value="${announcement.id}"> <!-- referenceId 유지 -->
-                                                            <div class="modal-body">
-                                                                <div class="form-group">
-                                                                    <textarea class="form-control" name="content" rows="3"
-                                                                              th:text="${reply.content}" required></textarea> <!-- reply.conten로 수정 -->
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                 <!-- 대댓글 수정 모달 -->
+                                 <div class="modal fade" th:id="'editReplyModal' + ${reply.id}" tabindex="-1"
+                                      role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                       <div class="modal-content">
+                                          <div class="modal-header">
+                                             <h5 class="modal-title">Edit Reply</h5>
+                                             <button type="button" class="close" data-dismiss="modal"
+                                                     aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                             </button>
+                                          </div>
+                                          <form th:action="@{/updateReply}" method="post">
+                                             <!-- Action 수정 -->
+                                             <input type="hidden" name="commentId"
+                                                    th:value="${reply.id}"> <!-- reply.id로 수정 -->
+                                             <input type="hidden" name="referenceId"
+                                                    th:value="${announcement.id}"><!-- referenceId 유지 -->
+                                             <div class="modal-body">
+                                                <div class="form-group">
+                                                                    <textarea class="form-control" name="content"
+                                                                              rows="3"
+                                                                              th:text="${reply.content}"
+                                                                              required></textarea>
+                                                   <!-- reply.conten로 수정 -->
                                                 </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                                             </div>
+                                             <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Save
+                                                   changes
+                                                </button>
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Cancel
+                                                </button>
+                                             </div>
+                                          </form>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </li>
+                           </ul>
+                        </li>
+                     </ul>
 
-                            <!-- 새 댓글 작성 -->
-                            <form th:action="@{/addComment}" method="post" class="mt-4">
-                                <input type="hidden" name="referenceId" th:value="${announcement.id}">
-                                <input type="hidden" name="commentType" value="PUBLIC_ANNOUNCEMENT">
-                                <div class="form-group">
-                                    <textarea class="form-control" name="content" placeholder="Write a comment..." rows="3" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Post Comment</button>
-                            </form>
+                     <!-- 새 댓글 작성 -->
+                     <form th:action="@{/addComment}" method="post" class="mt-4">
+                        <input type="hidden" name="referenceId" th:value="${announcement.id}">
+                        <input type="hidden" name="commentType" value="PUBLIC_ANNOUNCEMENT">
+                        <div class="form-group">
+                                    <textarea class="form-control" name="content" placeholder="Write a comment..."
+                                              rows="3" required></textarea>
                         </div>
-                    </div>
-                </div>
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                     </form>
+                  </div>
+               </div>
             </div>
-            <footer class="footer footer-black footer-white fixed-footer">
+         </div>
+         <footer class="footer footer-black footer-white fixed-footer">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="credits ml-auto">
+               <div class="row">
+                  <div class="credits ml-auto">
                         <span class="copyright">
                           © <script>
                             document.write(new Date().getFullYear())
                           </script>, made with <i class="fa fa-heart heart"></i> by E.M
                         </span>
-                    </div>
-                </div>
+                  </div>
+               </div>
             </div>
-        </footer>
-    </div>
-    <!-- Core JS Files -->
-    <script th:src="@{/assets/js/core/jquery.min.js}"></script>
-    <script th:src="@{/assets/js/core/popper.min.js}"></script>
-    <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
-    <!-- Include Perfect Scrollbar before paper-dashboard -->
-    <script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
-    <!-- Chart JS -->
-    <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
-    <!-- Main Dashboard Script -->
-    <script th:src="@{/assets/js/paper-dashboard.js}"></script>
-</div>
+         </footer>
+      </div>
+      <!-- Core JS Files -->
+      <script th:src="@{/assets/js/core/jquery.min.js}"></script>
+      <script th:src="@{/assets/js/core/popper.min.js}"></script>
+      <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+      <!-- Include Perfect Scrollbar before paper-dashboard -->
+      <script th:src="@{/assets/js/plugins/perfect-scrollbar.jquery.min.js}"></script>
+      <!-- Chart JS -->
+      <script th:src="@{/assets/js/plugins/chartjs.min.js}"></script>
+      <!-- Main Dashboard Script -->
+      <script th:src="@{/assets/js/paper-dashboard.js}"></script>
+   </div>
 </div>
 </body>
 </html>

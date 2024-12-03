@@ -52,15 +52,17 @@ public class CommentService {
 
     // 댓글 삭제 (대댓글 포함)
     public void deleteComment(Long commentId, User currentUser) {
+        // 댓글 조회
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
+           .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
 
         // 공고 작성자 가져오기
         PublicAnnouncement announcement = announcementRepository.findById(comment.getReferenceId())
-                .orElseThrow(() -> new RuntimeException("Public Announcement not found with ID: " + comment.getReferenceId()));
+           .orElseThrow(() -> new RuntimeException("Public Announcement not found with ID: " + comment.getReferenceId()));
 
         // 권한 확인: 댓글 작성자 또는 공고 작성자인 경우 삭제 가능
-        if (!comment.getUser().getId().equals(currentUser.getId()) && !announcement.getPostedBy().getId().equals(currentUser.getId())) {
+        if (!comment.getUser().getId().equals(currentUser.getId())
+           && !announcement.getPostedBy().getId().equals(currentUser.getId())) {
             throw new RuntimeException("You are not authorized to delete this comment.");
         }
 
@@ -80,7 +82,6 @@ public class CommentService {
             }
         }
     }
-
     // 댓글 수정
     public void updateComment(Long commentId, String content, User currentUser) {
         Comment comment = commentRepository.findById(commentId)

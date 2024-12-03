@@ -1,0 +1,29 @@
+/* 버튼 크기 통일 */
+.btn-uniform {
+   padding: 10px 20px; /* 내부 여백 */
+   height: auto; /* 높이를 내용에 맞춤 */
+   font-size: 13px; /* 글자 크기 통일 */
+   line-height: 1.5; /* 텍스트 정렬 */
+}
+
+/* 부모 컨테이너의 중앙 정렬 */
+.d-flex {
+   justify-content: center; /* 가로 중앙 정렬 */
+   align-items: center; /* 세로 중앙 정렬 */
+}
+
+.custom-update-btn {
+   background-color: #51cbce; /* 버튼 배경색 */
+   border-color: #51cbce; /* 버튼 테두리색 */
+   color: #ffffff; /* 텍스트 색상 (흰색) */
+}
+
+.custom-update-btn:hover {
+   background-color: #3aa7aa; /* 호버 시 조금 더 어두운 색상 */
+   border-color: #3aa7aa;
+}
+
+.custom-update-btn:focus {
+   outline: none; /* 포커스 시 기본 외곽선 제거 */
+   box-shadow: 0 0 0 0.2rem rgba(81, 203, 206, 0.5); /* 포커스 시 강조 */
+}

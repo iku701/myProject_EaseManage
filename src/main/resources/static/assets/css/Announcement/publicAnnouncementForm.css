@@ -10,6 +10,15 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* 부드러운 전환 효과 */
 }
 
+/* 모달 활성화 상태에서 hover 비활성화 */
+.modal-open .card:hover,
+.modal-open .list-group-item:hover,
+.modal-open .btn:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+
 .card:hover {
     transform: translateY(-5px); /* hover 시 위로 살짝 이동 */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* hover 시 그림자 강조 */
