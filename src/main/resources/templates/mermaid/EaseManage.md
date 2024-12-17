@@ -24,7 +24,8 @@ erDiagram
         String aboutMe
         String role
     }
-
+  
+  
     PROJECT {
         Long projectId PK
         String projectName
